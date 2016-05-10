@@ -1,11 +1,11 @@
 module Cf
   class Client
-    def initialize(email, auth_key)
-
+    def initialize(email, auth_key, base_url)
+      @base_url = base_url
     end
 
-    def post(url)
-
+    def post(query)
+      # wadus.post(base_url + query)
     end
   end
 
@@ -21,7 +21,7 @@ module Cf
   class << self
     def register(domain, destination)
      client = build_client
-     client.post('/client/v4/zones/')
+     client.post('/zones/zone_id/dns_records')
     end
 
     def resolve(domain); end
@@ -30,9 +30,10 @@ module Cf
 
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
+    BASE_URL = '/client/v4'.freeze
 
     def client(credentials)
-      Cf::Client.new(credentials.email, credentials.auth_key)
+      Cf::Client.new(credentials.email, credentials.auth_key, BASE_URL)
     end
 
     def default_credentials
