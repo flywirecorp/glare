@@ -13,7 +13,7 @@ describe Cf do
 
       Cf.register(:a_domain, :a_destination)
 
-      expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key', any_args)
+      expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key')
     end
 
     it 'uses a base URL' do
@@ -22,7 +22,7 @@ describe Cf do
 
       Cf.register(:a_domain, :a_destination)
 
-      expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key', '/client/v4')
+      expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key')
     end
 
     it 'uses the registration endpoint' do
