@@ -46,14 +46,16 @@ module Cf
   private_constant :DnsRecord
 
   class Result
-    class << self
-      def ocurrences(result)
-        JSON.parse(result)['result_info']['count'].to_i
-      end
+    def initialize(result)
+      @result = result
+    end
 
-      def first_result_id(result)
-        JSON.parse(result)['result'].first['id']
-      end
+    def ocurrences
+      JSON.parse(@result)['result_info']['count'].to_i
+    end
+
+    def first_result_id
+      JSON.parse(@result)['result'].first['id']
     end
   end
   private_constant :Result
@@ -63,15 +65,16 @@ module Cf
       client = build_client
       zone_id = zone_id(client, fqdn)
       dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
+      records = record_search(client, zone_id, fqdn)
+      result = Result.new(records)
 
-      record_search = client.get("/zones/#{zone_id}/dns_records", name: fqdn)
-
-      if Result.ocurrences(record_search) > 0
-        existing_record_id = Result.first_result_id(record_search)
-        client.put("/zones/#{zone_id}/dns_records/#{existing_record_id}", dns_record.to_h)
-      else
-        client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+      if result.ocurrences == 0
+        create(client, zone_id, dns_record)
+        return
       end
+
+      existing_record_id = result.first_result_id
+      update(client, zone_id, dns_record, existing_record_id)
     end
 
     def resolve(domain); end
@@ -81,9 +84,21 @@ module Cf
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
 
+    def record_search(client, zone_id, fqdn)
+      client.get("/zones/#{zone_id}/dns_records", name: fqdn)
+    end
+
+    def create(client, zone_id, dns_record)
+      client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+    end
+
+    def update(client, zone_id, dns_record, record_id)
+      client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+    end
+
     def zone_id(client, fqdn)
       zone_search = client.get('/zones', name: registered_domain(fqdn))
-      Result.first_result_id(zone_search)
+      Result.new(zone_search).first_result_id
     end
 
     def registered_domain(fqdn)
