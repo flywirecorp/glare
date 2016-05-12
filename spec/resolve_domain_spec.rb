@@ -4,6 +4,7 @@ describe 'Resolve domain' do
   context 'when a domain is registered' do
     let(:domain) { 'flywire.cc' }
     let(:destination) { 'peertransfer.me' }
+    let(:type) { 'CNAME' }
     before do
       register_domain(domain, destination)
     end
@@ -13,7 +14,7 @@ describe 'Resolve domain' do
     end
 
     def register_domain(domain, destination)
-      Cf.register(domain, destination)
+      Cf.register(domain, destination, type)
     end
 
     def resolve(domain)

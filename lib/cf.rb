@@ -9,7 +9,11 @@ module Cf
 
     end
 
-    def post(query)
+    def get(query, params)
+      # wadus.get(BASE_URL + query)
+    end
+
+    def post(query, data)
       # wadus.post(BASE_URL + query)
     end
   end
@@ -23,12 +27,28 @@ module Cf
     attr_reader :email, :auth_key
   end
 
+  class DnsRecord
+    def initialize(name:, type:, content:)
+      @name = name
+      @type = type
+      @content = content
+    end
+
+    def to_h
+      {
+        type: @type,
+        name: @name,
+        content: @content
+      }
+    end
+  end
+
   class << self
-    def register(fqdn, destination)
-      client = build_client
-      zone_info = client.get('/zones', name: domain(fqdn))
-      zone_id = JSON.parse(zone_info)['result'].first['id']
-      client.post("/zones/#{zone_id}/dns_records")
+    def register(fqdn, destination, type)
+      @client = build_client
+      zone_id = zone_id(fqdn)
+      dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
+      @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
     end
 
     def resolve(domain); end
@@ -38,9 +58,13 @@ module Cf
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
 
-    def domain(fqdn)
-      parsed_domain = PublicSuffix.parse(fqdn)
-      [parsed_domain.sld, parsed_domain.tld].compact.join('.')
+    def zone_id(fqdn)
+      zone_info = @client.get('/zones', name: registered_domain(fqdn))
+      JSON.parse(zone_info)['result'].first['id']
+    end
+
+    def registered_domain(fqdn)
+      PublicSuffix.parse(fqdn).domain
     end
 
     def client(credentials)
