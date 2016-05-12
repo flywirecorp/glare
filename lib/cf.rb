@@ -47,6 +47,7 @@ module Cf
     def register(fqdn, destination, type)
       @client = build_client
       zone_id = zone_id(fqdn)
+      @client.get("/zones/#{zone_id}/dns_records", name: fqdn)
       dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
       @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
     end

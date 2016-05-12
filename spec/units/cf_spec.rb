@@ -7,9 +7,15 @@ describe Cf do
       ENV['CF_AUTH_KEY'] = 'an_auth_key'
 
       allow(Cf::Client).to receive(:new).and_return(client)
+
       allow(client).to receive(:get).
         with('/zones', name: 'example.com').
         and_return(zone_list)
+
+      allow(client).to receive(:get).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        name: 'example.com'
+      )
     end
     let(:client) { spy(Cf::Client) }
     let(:zone_list) { load_fixture('list_zone') }
@@ -37,6 +43,9 @@ describe Cf do
     it 'retrieves zone id for a given domain name' do
       Cf.register('example.com', :a_destination, 'CNAME')
 
+      expect(client).to have_received(:get).
+        with('/zones', name: 'example.com')
+
       expect(client).to have_received(:post) do |*args|
         expect(args.first).to eq('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records')
       end
@@ -50,10 +59,19 @@ describe Cf do
         type: 'CNAME', name: 'example.com', content: :a_destination
       )
     end
+
+    it 'retrieves record to check if exists' do
+      Cf.register('example.com', :a_destination, 'CNAME')
+
+      expect(client).to have_received(:get).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        name: 'example.com'
+      )
+    end
   end
 
   def load_fixture(fixture)
     fixture_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures'))
     IO.read(File.join(fixture_dir, "#{fixture}.json"))
-	end
+  end
 end
