@@ -26,6 +26,7 @@ module Cf
 
     attr_reader :email, :auth_key
   end
+  private_constant :Credentials
 
   class DnsRecord
     def initialize(name:, type:, content:)
@@ -42,14 +43,35 @@ module Cf
       }
     end
   end
+  private_constant :DnsRecord
+
+  class Result
+    class << self
+      def ocurrences(result)
+        JSON.parse(result)['result_info']['count'].to_i
+      end
+
+      def first_result_id(result)
+        JSON.parse(result)['result'].first['id']
+      end
+    end
+  end
+  private_constant :Result
 
   class << self
     def register(fqdn, destination, type)
-      @client = build_client
-      zone_id = zone_id(fqdn)
-      @client.get("/zones/#{zone_id}/dns_records", name: fqdn)
+      client = build_client
+      zone_id = zone_id(client, fqdn)
       dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
-      @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+
+      record_search = client.get("/zones/#{zone_id}/dns_records", name: fqdn)
+
+      if Result.ocurrences(record_search) > 0
+        existing_record_id = Result.first_result_id(record_search)
+        client.put("/zones/#{zone_id}/dns_records/#{existing_record_id}", dns_record.to_h)
+      else
+        client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+      end
     end
 
     def resolve(domain); end
@@ -59,9 +81,9 @@ module Cf
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
 
-    def zone_id(fqdn)
-      zone_info = @client.get('/zones', name: registered_domain(fqdn))
-      JSON.parse(zone_info)['result'].first['id']
+    def zone_id(client, fqdn)
+      zone_search = client.get('/zones', name: registered_domain(fqdn))
+      Result.first_result_id(zone_search)
     end
 
     def registered_domain(fqdn)
