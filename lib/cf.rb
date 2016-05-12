@@ -1,3 +1,6 @@
+require 'public_suffix'
+require 'json'
+
 module Cf
   class Client
     BASE_URL = '/client/v4'.freeze
@@ -21,9 +24,11 @@ module Cf
   end
 
   class << self
-    def register(domain, destination)
-     client = build_client
-     client.post('/zones/zone_id/dns_records')
+    def register(fqdn, destination)
+      client = build_client
+      zone_info = client.get('/zones', name: domain(fqdn))
+      zone_id = JSON.parse(zone_info)['result'].first['id']
+      client.post("/zones/#{zone_id}/dns_records")
     end
 
     def resolve(domain); end
@@ -32,6 +37,11 @@ module Cf
 
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
+
+    def domain(fqdn)
+      parsed_domain = PublicSuffix.parse(fqdn)
+      [parsed_domain.sld, parsed_domain.tld].compact.join('.')
+    end
 
     def client(credentials)
       Cf::Client.new(credentials.email, credentials.auth_key)
