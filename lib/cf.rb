@@ -62,19 +62,59 @@ module Cf
 
   class Domain
     class Zone
-      def initialize(client)
+      def initialize(client, fqdn)
         @client = client
+        @fqdn = fqdn
       end
 
-      def id(fqdn)
-        zone_search = @client.get('/zones', name: registered_domain(fqdn))
-        Result.new(zone_search).first_result_id
+      def records
+        @id = id
+        records = record_search
+        Result.new(records)
+      end
+
+      def id
+        return @id if @id
+        zone_search = @client.get('/zones', name: registered_domain)
+        @id = Result.new(zone_search).first_result_id
       end
 
       private
 
-      def registered_domain(fqdn)
-        PublicSuffix.parse(fqdn).domain
+      def registered_domain
+        PublicSuffix.parse(@fqdn).domain
+      end
+
+      def record_search
+        @client.get("/zones/#{@id}/dns_records", name: @fqdn)
+      end
+    end
+
+    class Record
+      class << self
+        def register(client, zone, dns_record)
+          @client = client
+          result = zone.records
+          zone_id = zone.id
+
+          if result.ocurrences == 0
+            create(zone_id, dns_record)
+            return
+          end
+
+          existing_record_id = result.first_result_id
+          update(zone_id, dns_record, existing_record_id)
+        end
+
+        private
+
+        def create(zone_id, dns_record)
+          @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+        end
+
+        def update(zone_id, dns_record, record_id)
+          @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+        end
       end
     end
 
@@ -85,32 +125,8 @@ module Cf
     def register(fqdn, destination, type)
       dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
 
-      zone_id = Zone.new(@client).id(fqdn)
-
-      records = record_search(zone_id, fqdn)
-      result = Result.new(records)
-
-      if result.ocurrences == 0
-        create(zone_id, dns_record)
-        return
-      end
-
-      existing_record_id = result.first_result_id
-      update(zone_id, dns_record, existing_record_id)
-    end
-
-    private
-
-    def record_search(zone_id, fqdn)
-      @client.get("/zones/#{zone_id}/dns_records", name: fqdn)
-    end
-
-    def create(zone_id, dns_record)
-      @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
-    end
-
-    def update(zone_id, dns_record, record_id)
-      @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+      zone = Zone.new(@client, fqdn)
+      Record.register(@client, zone, dns_record)
     end
   end
 
