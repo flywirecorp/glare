@@ -60,21 +60,64 @@ module Cf
   end
   private_constant :Result
 
-  class << self
+  class Domain
+    class Zone
+      def initialize(client)
+        @client = client
+      end
+
+      def id(fqdn)
+        zone_search = @client.get('/zones', name: registered_domain(fqdn))
+        Result.new(zone_search).first_result_id
+      end
+
+      private
+
+      def registered_domain(fqdn)
+        PublicSuffix.parse(fqdn).domain
+      end
+    end
+
+    def initialize(client)
+      @client = client
+    end
+
     def register(fqdn, destination, type)
-      client = build_client
-      zone_id = zone_id(client, fqdn)
       dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
-      records = record_search(client, zone_id, fqdn)
+
+      zone_id = Zone.new(@client).id(fqdn)
+
+      records = record_search(zone_id, fqdn)
       result = Result.new(records)
 
       if result.ocurrences == 0
-        create(client, zone_id, dns_record)
+        create(zone_id, dns_record)
         return
       end
 
       existing_record_id = result.first_result_id
-      update(client, zone_id, dns_record, existing_record_id)
+      update(zone_id, dns_record, existing_record_id)
+    end
+
+    private
+
+    def record_search(zone_id, fqdn)
+      @client.get("/zones/#{zone_id}/dns_records", name: fqdn)
+    end
+
+    def create(zone_id, dns_record)
+      @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+    end
+
+    def update(zone_id, dns_record, record_id)
+      @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+    end
+  end
+
+  class << self
+    def register(fqdn, destination, type)
+      client = build_client
+      Domain.new(client).register(fqdn, destination, type)
     end
 
     def resolve(domain); end
@@ -83,27 +126,6 @@ module Cf
 
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
-
-    def record_search(client, zone_id, fqdn)
-      client.get("/zones/#{zone_id}/dns_records", name: fqdn)
-    end
-
-    def create(client, zone_id, dns_record)
-      client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
-    end
-
-    def update(client, zone_id, dns_record, record_id)
-      client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
-    end
-
-    def zone_id(client, fqdn)
-      zone_search = client.get('/zones', name: registered_domain(fqdn))
-      Result.new(zone_search).first_result_id
-    end
-
-    def registered_domain(fqdn)
-      PublicSuffix.parse(fqdn).domain
-    end
 
     def client(credentials)
       Cf::Client.new(credentials.email, credentials.auth_key)
