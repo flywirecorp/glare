@@ -28,12 +28,6 @@ describe Cf do
       expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key')
     end
 
-    it 'uses a base URL' do
-      Cf.register('example.com', :a_destination, 'CNAME')
-
-      expect(Cf::Client).to have_received(:new).with('an_email', 'an_auth_key')
-    end
-
     it 'uses the registration endpoint' do
       Cf.register('example.com', :a_destination, 'CNAME')
 

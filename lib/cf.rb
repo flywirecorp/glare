@@ -5,9 +5,7 @@ module Cf
   class Client
     BASE_URL = '/client/v4'.freeze
 
-    def initialize(email, auth_key)
-
-    end
+    def initialize(email, auth_key); end
 
     def get(query, params)
       # wadus.get(BASE_URL + query)
@@ -68,7 +66,6 @@ module Cf
       end
 
       def records
-        @id = id
         records = record_search
         Result.new(records)
       end
@@ -86,7 +83,7 @@ module Cf
       end
 
       def record_search
-        @client.get("/zones/#{@id}/dns_records", name: @fqdn)
+        @client.get("/zones/#{id}/dns_records", name: @fqdn)
       end
     end
 
