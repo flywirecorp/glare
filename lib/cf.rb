@@ -1,18 +1,28 @@
 require 'public_suffix'
 require 'json'
+require 'httpclient'
+
+# Test Cf::Client unitary
 
 module Cf
   class Client
-    BASE_URL = '/client/v4'.freeze
+    BASE_URL = 'https://api.cloudflare.com/client/v4'.freeze
 
-    def initialize(email, auth_key); end
+    def initialize(email, auth_key)
+      @headers = {
+        'X-Auth-Email' => email,
+        'X-Auth-Key' => auth_key
+      }
+    end
 
     def get(query, params)
-      # wadus.get(BASE_URL + query)
+      http = HTTPClient.new
+      http.get_content(BASE_URL + query, params, @headers)
     end
 
     def post(query, data)
-      # wadus.post(BASE_URL + query)
+      http = HTTPClient.new
+      http.post(BASE_URL + query, data, @headers)
     end
   end
 
@@ -54,6 +64,10 @@ module Cf
 
     def first_result_id
       JSON.parse(@result)['result'].first['id']
+    end
+
+    def first_result_content
+      JSON.parse(@result)['result'].first['content']
     end
   end
   private_constant :Result
@@ -125,6 +139,12 @@ module Cf
       zone = Zone.new(@client, fqdn)
       Record.register(@client, zone, dns_record)
     end
+
+    def resolve(fqdn)
+      zone = Zone.new(@client, fqdn)
+      result = zone.records
+      result.first_result_content
+    end
   end
 
   class << self
@@ -133,7 +153,10 @@ module Cf
       Domain.new(client).register(fqdn, destination, type)
     end
 
-    def resolve(domain); end
+    def resolve(fqdn)
+      client = build_client
+      Domain.new(client).resolve(fqdn)
+    end
 
     private
 

@@ -1,13 +1,35 @@
 require 'cf'
 
 describe Cf do
+  before do
+    ENV['CF_EMAIL'] = 'an_email'
+    ENV['CF_AUTH_KEY'] = 'an_auth_key'
+
+    allow(Cf::Client).to receive(:new).and_return(client)
+  end
+  let(:client) { spy(Cf::Client) }
+  let(:zone_list) { load_fixture('list_zone') }
+  let(:empty_result) { load_fixture('empty_result') }
+  let(:wadus_record) { load_fixture('wadus_record') }
+
+  describe '.resolve' do
+    it 'resolves a fqdn' do
+      allow(client).to receive(:get).
+        with('/zones', name: 'example.com').
+        and_return(zone_list)
+
+      allow(client).to receive(:get).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        name: 'wadus.example.com'
+      ).and_return(wadus_record)
+
+      destination = Cf.resolve('wadus.example.com')
+      expect(destination).to eq('destination.com')
+    end
+  end
+
   describe '.register' do
     before do
-      ENV['CF_EMAIL'] = 'an_email'
-      ENV['CF_AUTH_KEY'] = 'an_auth_key'
-
-      allow(Cf::Client).to receive(:new).and_return(client)
-
       allow(client).to receive(:get).
         with('/zones', name: 'example.com').
         and_return(zone_list)
@@ -17,10 +39,6 @@ describe Cf do
         name: 'example.com'
       ).and_return(empty_result)
     end
-    let(:client) { spy(Cf::Client) }
-    let(:zone_list) { load_fixture('list_zone') }
-    let(:empty_result) { load_fixture('empty_result') }
-    let(:wadus_record) { load_fixture('wadus_record') }
 
     it 'uses default credentials' do
       Cf.register('example.com', :a_destination, 'CNAME')
