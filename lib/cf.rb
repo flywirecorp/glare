@@ -10,6 +10,7 @@ module Cf
 
     def initialize(email, auth_key)
       @headers = {
+        'Content-Type' => 'application/json',
         'X-Auth-Email' => email,
         'X-Auth-Key' => auth_key
       }
@@ -22,7 +23,14 @@ module Cf
 
     def post(query, data)
       http = HTTPClient.new
-      http.post(BASE_URL + query, data, @headers)
+      json_data = JSON.generate(data)
+      http.post(BASE_URL + query, json_data, @headers)
+    end
+
+    def put(query, data)
+      http = HTTPClient.new
+      json_data = JSON.generate(data)
+      http.put(BASE_URL + query, json_data, @headers)
     end
   end
 
@@ -67,6 +75,7 @@ module Cf
     end
 
     def first_result_content
+      return if ocurrences == 0
       JSON.parse(@result)['result'].first['content']
     end
   end
