@@ -48,6 +48,10 @@ module Cf
       return if ocurrences == 0
       JSON.parse(@result)['result'].first['content']
     end
+
+    def ids
+      JSON.parse(@result)['result'].map { |result| result['id'] }
+    end
   end
   private_constant :Result
 
@@ -92,8 +96,8 @@ module Cf
             return
           end
 
-          existing_record_id = result.first_result_id
-          update(zone_id, dns_records, existing_record_id)
+          existing_record_ids = result.ids
+          update(zone_id, dns_records, existing_record_ids)
         end
 
         private
@@ -104,8 +108,9 @@ module Cf
           end
         end
 
-        def update(zone_id, dns_records, record_id)
-          dns_records.each do |dns_record|
+        def update(zone_id, dns_records, record_ids)
+          updates = dns_records.zip(record_ids)
+          updates.each do |dns_record, record_id|
             @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
           end
         end

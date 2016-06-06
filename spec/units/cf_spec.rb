@@ -10,7 +10,7 @@ describe Cf do
   let(:client) { spy(Cf::Client) }
   let(:zone_list) { load_fixture('list_zone') }
   let(:empty_result) { load_fixture('empty_result') }
-  let(:wadus_record) { load_fixture('wadus_record') }
+  let(:wadus_records) { load_fixture('wadus_records') }
 
   describe '.resolve' do
     it 'resolves a fqdn' do
@@ -21,7 +21,7 @@ describe Cf do
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
         name: 'wadus.example.com'
-      ).and_return(wadus_record)
+      ).and_return(wadus_records)
 
       destination = Cf.resolve('wadus.example.com')
       expect(destination).to eq('destination.com')
@@ -113,21 +113,30 @@ describe Cf do
       )
     end
 
-    it 'sends registration data to update endpoint when record exists' do
-      allow(client).to receive(:get).with(
-        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'wadus.example.com'
-      ).and_return(wadus_record)
+    context 'when records exist' do
+      context 'when number of records to update match existing' do
+        it 'sends registration data to update endpoint' do
+          allow(client).to receive(:get).with(
+            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+            name: 'wadus.example.com'
+          ).and_return(wadus_records)
 
-      Cf.register('wadus.example.com', :a_destination, 'CNAME')
+          Cf.register('wadus.example.com', ['a_destination.com', 'yet_another_destination.com'], 'CNAME')
 
-      expect(client).not_to have_received(:post).
-        with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
+          expect(client).not_to have_received(:post).
+            with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
 
-      expect(client).to have_received(:put).with(
-        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
-        type: 'CNAME', name: 'wadus.example.com', content: :a_destination
-      )
+          expect(client).to have_received(:put).with(
+            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
+            type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com'
+          )
+
+          expect(client).to have_received(:put).with(
+            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
+            type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com'
+          )
+        end
+      end
     end
   end
 
