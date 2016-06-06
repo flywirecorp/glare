@@ -82,28 +82,32 @@ module Cf
 
     class Record
       class << self
-        def register(client, zone, dns_record)
+        def register(client, zone, dns_records)
           @client = client
           result = zone.records
           zone_id = zone.id
 
           if result.ocurrences == 0
-            create(zone_id, dns_record)
+            create(zone_id, dns_records)
             return
           end
 
           existing_record_id = result.first_result_id
-          update(zone_id, dns_record, existing_record_id)
+          update(zone_id, dns_records, existing_record_id)
         end
 
         private
 
-        def create(zone_id, dns_record)
-          @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+        def create(zone_id, dns_records)
+          dns_records.each do |dns_record|
+            @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
+          end
         end
 
-        def update(zone_id, dns_record, record_id)
-          @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+        def update(zone_id, dns_records, record_id)
+          dns_records.each do |dns_record|
+            @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
+          end
         end
       end
     end
@@ -112,11 +116,13 @@ module Cf
       @client = client
     end
 
-    def register(fqdn, destination, type)
-      dns_record = DnsRecord.new(type: type, name: fqdn, content: destination)
+    def register(fqdn, destinations, type)
+      dns_records = Array(destinations).map do |destination|
+        DnsRecord.new(type: type, name: fqdn, content: destination)
+      end
 
       zone = Zone.new(@client, fqdn)
-      Record.register(@client, zone, dns_record)
+      Record.register(@client, zone, dns_records)
     end
 
     def resolve(fqdn)

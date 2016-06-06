@@ -91,6 +91,28 @@ describe Cf do
       )
     end
 
+    it 'sends registration data to creation endpoint when record does not exist with multiple records' do
+      allow(client).to receive(:get).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        name: 'not-exist.example.com'
+      ).and_return(empty_result)
+
+      Cf.register('not-exist.example.com', [:a_destination, :another_destination], 'CNAME')
+
+      expect(client).not_to have_received(:put).
+        with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
+
+      expect(client).to have_received(:post).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        type: 'CNAME', name: 'not-exist.example.com', content: :a_destination
+      )
+
+      expect(client).to have_received(:post).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        type: 'CNAME', name: 'not-exist.example.com', content: :another_destination
+      )
+    end
+
     it 'sends registration data to update endpoint when record exists' do
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
