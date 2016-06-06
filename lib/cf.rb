@@ -1,19 +1,11 @@
 require 'public_suffix'
 require 'json'
 require 'httpclient'
+require 'cf/credentials'
 require 'cf/client'
+require 'cf/domain'
 
 module Cf
-  class Credentials
-    def initialize(email, auth_key)
-      @email = email
-      @auth_key = auth_key
-    end
-
-    attr_reader :email, :auth_key
-  end
-  private_constant :Credentials
-
   class DnsRecord
     def initialize(name:, type:, content:)
       @name = name
@@ -28,6 +20,7 @@ module Cf
         content: @content
       }
     end
+    attr_reader :content
   end
   private_constant :DnsRecord
 
@@ -55,85 +48,39 @@ module Cf
   end
   private_constant :Result
 
-  class Domain
-    class Zone
-      def initialize(client, fqdn)
-        @client = client
-        @fqdn = fqdn
-      end
+  class CfDnsRecord
+    def initialize(id:, name:, type:, content:)
+      @id = id
+      @name = name
+      @type = type
+      @content = content
+    end
+    attr_reader :id, :name, :type, :content
+  end
 
-      def records
-        records = record_search
-        Result.new(records)
-      end
+  class DnsResult < Result
+    def initialize(result)
+      super(result)
+      @existing_records = records
+    end
 
-      def id
-        return @id if @id
-        zone_search = @client.get('/zones', name: registered_domain)
-        @id = Result.new(zone_search).first_result_id
-      end
-
-      private
-
-      def registered_domain
-        PublicSuffix.parse(@fqdn).domain
-      end
-
-      def record_search
-        @client.get("/zones/#{id}/dns_records", name: @fqdn)
+    def records_to_update(desired_records)
+      records.reject do |record|
+        desired_records.any? { |r| r.content == record.content }
       end
     end
 
-    class Record
-      class << self
-        def register(client, zone, dns_records)
-          @client = client
-          result = zone.records
-          zone_id = zone.id
+    private
 
-          if result.ocurrences == 0
-            create(zone_id, dns_records)
-            return
-          end
-
-          existing_record_ids = result.ids
-          update(zone_id, dns_records, existing_record_ids)
-        end
-
-        private
-
-        def create(zone_id, dns_records)
-          dns_records.each do |dns_record|
-            @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
-          end
-        end
-
-        def update(zone_id, dns_records, record_ids)
-          updates = dns_records.zip(record_ids)
-          updates.each do |dns_record, record_id|
-            @client.put("/zones/#{zone_id}/dns_records/#{record_id}", dns_record.to_h)
-          end
-        end
+    def records
+      JSON.parse(@result)['result'].map do |item|
+        CfDnsRecord.new(
+          id: item['id'],
+          name: item['name'],
+          type: item['type'],
+          content: item['content']
+        )
       end
-    end
-
-    def initialize(client)
-      @client = client
-    end
-
-    def register(fqdn, destinations, type)
-      dns_records = Array(destinations).map do |destination|
-        DnsRecord.new(type: type, name: fqdn, content: destination)
-      end
-
-      zone = Zone.new(@client, fqdn)
-      Record.register(@client, zone, dns_records)
-    end
-
-    def resolve(fqdn)
-      zone = Zone.new(@client, fqdn)
-      result = zone.records
-      result.first_result_content
     end
   end
 
