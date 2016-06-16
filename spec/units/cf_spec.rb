@@ -24,7 +24,7 @@ describe Cf do
       ).and_return(wadus_records)
 
       destination = Cf.resolve('wadus.example.com')
-      expect(destination).to eq('destination.com')
+      expect(destination).to eq(['destination.com', 'another_destination.com'])
     end
   end
 

@@ -42,8 +42,13 @@ module Cf
       JSON.parse(@result)['result'].first['content']
     end
 
+    def contents
+      return if ocurrences == 0
+      JSON.parse(@result)['result'].map { |item| item['content'] }
+    end
+
     def ids
-      JSON.parse(@result)['result'].map { |result| result['id'] }
+      JSON.parse(@result)['result'].map { |item| item['id'] }
     end
   end
   private_constant :Result

@@ -3,7 +3,7 @@ require 'cf'
 describe 'Resolve domain' do
   context 'when a domain is registered' do
     let(:domain) { 'cname.flywire.cc' }
-    let(:destination) { 'peertransfer.me' }
+    let(:destination) { ['peertransfer.me'] }
     let(:type) { 'CNAME' }
     before do
       register_domain(domain, destination)

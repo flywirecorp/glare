@@ -78,7 +78,7 @@ module Cf
     def resolve(fqdn)
       zone = Zone.new(@client, fqdn)
       result = zone.records
-      result.first_result_content
+      result.contents
     end
   end
 end
