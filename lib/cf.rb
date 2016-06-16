@@ -79,8 +79,8 @@ module Cf
       @existing_records.count
     end
 
-    def pop(number)
-      @existing_records.pop(number)
+    def records_to_delete(targer_number)
+      @existing_records.pop(count - targer_number)
     end
 
     private
