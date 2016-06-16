@@ -80,7 +80,10 @@ module Cf
     end
 
     def records_to_delete(targer_number)
-      @existing_records.pop(count - targer_number)
+      records_to_delete = count - targer_number
+      return [] if records_to_delete < 0
+
+      @existing_records.pop(records_to_delete)
     end
 
     private

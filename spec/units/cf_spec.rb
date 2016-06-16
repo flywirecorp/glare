@@ -177,8 +177,23 @@ describe Cf do
         )
       end
 
-      it 'updates different records and creates new ones' do
-        #
+      xit 'updates different records and creates new ones' do
+        Cf.register('wadus.example.com', ['destination.com', 'another_destination.com', 'a_third_destination.com'], 'CNAME')
+
+        expect(client).not_to have_received(:put).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
+          any_args
+        )
+
+        expect(client).not_to have_received(:put).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
+          any_args
+        )
+
+        expect(client).to have_received(:post).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+          type: 'CNAME', name: 'wadus.example.com', content: 'a_third_destination.com'
+        )
       end
     end
   end
