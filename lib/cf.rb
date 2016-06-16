@@ -75,6 +75,14 @@ module Cf
       end
     end
 
+    def count
+      @existing_records.count
+    end
+
+    def pop(number)
+      @existing_records.pop(number)
+    end
+
     private
 
     def records

@@ -114,52 +114,71 @@ describe Cf do
     end
 
     context 'when records exist' do
-      context 'when number of records to update match existing and are different' do
-        it 'sends registration data to update endpoint' do
-          allow(client).to receive(:get).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-            name: 'wadus.example.com'
-          ).and_return(wadus_records)
+      before do
+        allow(client).to receive(:get).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+          name: 'wadus.example.com'
+        ).and_return(wadus_records)
+      end
 
-          Cf.register('wadus.example.com', ['a_destination.com', 'yet_another_destination.com'], 'CNAME')
+      context 'same number of records to update' do
+        context 'records contents are different' do
+          it 'sends registration data to update endpoint' do
+            Cf.register('wadus.example.com', ['a_destination.com', 'yet_another_destination.com'], 'CNAME')
 
-          expect(client).not_to have_received(:post).
-            with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
+            expect(client).not_to have_received(:post).
+              with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
 
-          expect(client).to have_received(:put).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
-            type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com'
-          )
+            expect(client).to have_received(:put).with(
+              '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
+              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com'
+            )
 
-          expect(client).to have_received(:put).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
-            type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com'
-          )
+            expect(client).to have_received(:put).with(
+              '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
+              type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com'
+            )
+          end
+        end
+
+        context 'records contents are the same' do
+          it 'sends registration data to update endpoint' do
+            Cf.register('wadus.example.com', ['destination.com', 'another_destination.com'], 'CNAME')
+
+            expect(client).not_to have_received(:post).
+              with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
+
+            expect(client).not_to have_received(:put).with(
+              '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
+              any_args
+            )
+
+            expect(client).not_to have_received(:put).with(
+              '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
+              any_args
+            )
+          end
         end
       end
 
-      context 'when number of records to update match existing and are the same' do
-        it 'sends registration data to update endpoint' do
-          allow(client).to receive(:get).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-            name: 'wadus.example.com'
-          ).and_return(wadus_records)
+      it 'updates different records and deletes extra ones' do
+        Cf.register('wadus.example.com', ['a_destination.com'], 'CNAME')
 
-          Cf.register('wadus.example.com', ['destination.com', 'another_destination.com'], 'CNAME')
+        expect(client).not_to have_received(:post).
+          with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
 
-          expect(client).not_to have_received(:post).
-            with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
+        expect(client).to have_received(:put).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
+          any_args
+        )
 
-          expect(client).not_to have_received(:put).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
-            any_args
-          )
+        expect(client).to have_received(:delete).with(
+          '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc'
+        )
+      end
 
-          expect(client).not_to have_received(:put).with(
-            '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc',
-            any_args
-          )
-        end
+      it 'updates different records and creates new ones' do
+        #
       end
     end
   end

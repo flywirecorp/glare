@@ -51,12 +51,17 @@ module Cf
           end
         end
 
-        def update(zone_id, dns_records, search)
-          records_to_update = search.records_to_update(dns_records)
+        def update(zone_id, dns_records, existing_records)
+          records_to_update = existing_records.records_to_update(dns_records)
+          records_to_delete = existing_records.pop(existing_records.count - dns_records.count)
 
           updates = records_to_update.zip(dns_records)
           updates.each do |existing_record, dns_record|
             @client.put("/zones/#{zone_id}/dns_records/#{existing_record.id}", dns_record.to_h)
+          end
+
+          records_to_delete.each do |record|
+            @client.delete("/zones/#{zone_id}/dns_records/#{record.id}")
           end
         end
       end
