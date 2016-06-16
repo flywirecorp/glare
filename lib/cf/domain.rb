@@ -53,10 +53,9 @@ module Cf
 
         def update(zone_id, dns_records, search)
           records_to_update = search.records_to_update(dns_records)
-          return if records_to_update.empty?
 
-          updates = dns_records.zip(records_to_update)
-          updates.each do |dns_record, existing_record|
+          updates = records_to_update.zip(dns_records)
+          updates.each do |existing_record, dns_record|
             @client.put("/zones/#{zone_id}/dns_records/#{existing_record.id}", dns_record.to_h)
           end
         end
