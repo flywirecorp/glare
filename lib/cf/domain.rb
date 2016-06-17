@@ -8,7 +8,7 @@ module Cf
 
       def records
         records = record_search
-        DnsResult.new(records)
+        DnsRecords.new(records)
       end
 
       def id
@@ -32,28 +32,18 @@ module Cf
       class << self
         def register(client, zone, dns_records)
           @client = client
-          existing_records_result = zone.records
+          existing_records = zone.records
           zone_id = zone.id
 
-          if existing_records_result.ocurrences == 0
-            create(zone_id, dns_records)
-            return
-          end
-
-          update(zone_id, dns_records, existing_records_result)
+          update(zone_id, dns_records, existing_records)
         end
 
         private
 
-        def create(zone_id, dns_records)
-          dns_records.each do |dns_record|
-            @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
-          end
-        end
-
         def update(zone_id, dns_records, existing_records)
           update_current_records(zone_id, dns_records, existing_records)
           delete_uneeded_records(zone_id, dns_records, existing_records)
+          create_new_records(zone_id, dns_records, existing_records)
         end
 
         def update_current_records(zone_id, dns_records, existing_records)
@@ -68,6 +58,17 @@ module Cf
           records_to_delete = existing_records.records_to_delete(dns_records.count)
           records_to_delete.each do |record|
             @client.delete("/zones/#{zone_id}/dns_records/#{record.id}")
+          end
+        end
+
+        def create_new_records(zone_id, dns_records, existing_records)
+          records_to_create = existing_records.records_to_create(dns_records)
+          create(zone_id, records_to_create)
+        end
+
+        def create(zone_id, dns_records)
+          dns_records.each do |dns_record|
+            @client.post("/zones/#{zone_id}/dns_records", dns_record.to_h)
           end
         end
       end

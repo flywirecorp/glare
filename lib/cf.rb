@@ -64,27 +64,31 @@ module Cf
     attr_reader :id, :name, :type, :content
   end
 
-  class DnsResult < Result
+  class DnsRecords < Result
     def initialize(result)
       super(result)
-      @existing_records = records
+      @records = records
     end
 
     def records_to_update(desired_records)
-      records.reject do |record|
+      @records.reject do |record|
         desired_records.any? { |r| r.content == record.content }
       end
     end
 
     def count
-      @existing_records.count
+      @records.count
     end
 
     def records_to_delete(targer_number)
       records_to_delete = count - targer_number
       return [] if records_to_delete < 0
 
-      @existing_records.pop(records_to_delete)
+      @records.pop(records_to_delete)
+    end
+
+    def records_to_create(desired_records)
+      desired_records.drop(count)
     end
 
     private

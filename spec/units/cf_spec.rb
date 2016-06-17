@@ -177,7 +177,7 @@ describe Cf do
         )
       end
 
-      xit 'updates different records and creates new ones' do
+      it 'updates different records and creates new ones' do
         Cf.register('wadus.example.com', ['destination.com', 'another_destination.com', 'a_third_destination.com'], 'CNAME')
 
         expect(client).not_to have_received(:put).with(
