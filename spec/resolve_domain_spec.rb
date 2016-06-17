@@ -51,6 +51,6 @@ RSpec.describe 'Resolve domain' do
   end
 
   def resolve(domain)
-    Cf.resolve(domain)
+    Cf.resolve(domain, type)
   end
 end

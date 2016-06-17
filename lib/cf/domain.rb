@@ -6,8 +6,8 @@ module Cf
         @fqdn = fqdn
       end
 
-      def records
-        records = record_search
+      def records(type)
+        records = record_search(type)
         DnsRecords.new(records)
       end
 
@@ -23,8 +23,8 @@ module Cf
         PublicSuffix.parse(@fqdn).domain
       end
 
-      def record_search
-        @client.get("/zones/#{id}/dns_records", name: @fqdn)
+      def record_search(type)
+        @client.get("/zones/#{id}/dns_records", name: @fqdn, type: type)
       end
     end
 
@@ -32,7 +32,7 @@ module Cf
       class << self
         def register(client, zone, dns_records)
           @client = client
-          existing_records = zone.records
+          existing_records = zone.records(dns_records.first.type)
           zone_id = zone.id
 
           update(zone_id, dns_records, existing_records)
@@ -87,9 +87,9 @@ module Cf
       Record.register(@client, zone, dns_records)
     end
 
-    def resolve(fqdn)
+    def resolve(fqdn, type)
       zone = Zone.new(@client, fqdn)
-      result = zone.records
+      result = zone.records(type)
       result.contents
     end
   end

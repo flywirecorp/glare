@@ -20,10 +20,10 @@ RSpec.describe Cf do
 
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'wadus.example.com'
+        name: 'wadus.example.com', type: 'CNAME'
       ).and_return(wadus_records)
 
-      destination = Cf.resolve('wadus.example.com')
+      destination = Cf.resolve('wadus.example.com', 'CNAME')
       expect(destination).to eq(['destination.com', 'another_destination.com'])
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe Cf do
 
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'example.com'
+        name: 'example.com', type: 'CNAME'
       ).and_return(empty_result)
     end
 
@@ -70,14 +70,14 @@ RSpec.describe Cf do
 
       expect(client).to have_received(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'example.com'
+        name: 'example.com', type: 'CNAME'
       )
     end
 
     it 'sends registration data to creation endpoint when record does not exist' do
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'not-exist.example.com'
+        name: 'not-exist.example.com', type: 'CNAME'
       ).and_return(empty_result)
 
       Cf.register('not-exist.example.com', :a_destination, 'CNAME')
@@ -94,7 +94,7 @@ RSpec.describe Cf do
     it 'sends registration data to creation endpoint when record does not exist with multiple records' do
       allow(client).to receive(:get).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        name: 'not-exist.example.com'
+        name: 'not-exist.example.com', type: 'CNAME'
       ).and_return(empty_result)
 
       Cf.register('not-exist.example.com', [:a_destination, :another_destination], 'CNAME')
@@ -117,7 +117,7 @@ RSpec.describe Cf do
       before do
         allow(client).to receive(:get).with(
           '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-          name: 'wadus.example.com'
+          name: 'wadus.example.com', type: 'CNAME'
         ).and_return(wadus_records)
       end
 

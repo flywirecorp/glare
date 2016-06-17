@@ -19,7 +19,7 @@ module Cf
         content: @content
       }
     end
-    attr_reader :content
+    attr_reader :content, :type
   end
   private_constant :DnsRecord
 
@@ -115,9 +115,9 @@ module Cf
       Domain.new(client).register(fqdn, destination, type)
     end
 
-    def resolve(fqdn)
+    def resolve(fqdn, type)
       client = build_client
-      Domain.new(client).resolve(fqdn)
+      Domain.new(client).resolve(fqdn, type)
     end
 
     private
