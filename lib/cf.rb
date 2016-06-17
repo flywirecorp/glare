@@ -1,6 +1,7 @@
 require 'public_suffix'
 require 'json'
 require 'httpclient'
+require 'cf/version'
 require 'cf/credentials'
 require 'cf/client'
 require 'cf/domain'
