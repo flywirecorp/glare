@@ -1,6 +1,4 @@
 require 'public_suffix'
-require 'json'
-require 'httpclient'
 require 'cf/version'
 require 'cf/credentials'
 require 'cf/client'
@@ -31,25 +29,31 @@ module Cf
     end
 
     def ocurrences
-      JSON.parse(@result)['result_info']['count'].to_i
+      result['result_info']['count'].to_i
     end
 
     def first_result_id
-      JSON.parse(@result)['result'].first['id']
+      result['result'].first['id']
     end
 
     def first_result_content
       return if ocurrences == 0
-      JSON.parse(@result)['result'].first['content']
+      result['result'].first['content']
     end
 
     def contents
       return if ocurrences == 0
-      JSON.parse(@result)['result'].map { |item| item['content'] }
+      result['result'].map { |item| item['content'] }
     end
 
     def ids
-      JSON.parse(@result)['result'].map { |item| item['id'] }
+      result['result'].map { |item| item['id'] }
+    end
+
+    private
+
+    def result
+      @result.content
     end
   end
   private_constant :Result
@@ -94,7 +98,7 @@ module Cf
     private
 
     def records
-      JSON.parse(@result)['result'].map do |item|
+      result['result'].map do |item|
         CfDnsRecord.new(
           id: item['id'],
           name: item['name'],
