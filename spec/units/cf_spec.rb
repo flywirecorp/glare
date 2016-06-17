@@ -2,8 +2,8 @@ require 'cf'
 
 RSpec.describe Cf do
   before do
-    ENV['CF_EMAIL'] = 'an_email'
-    ENV['CF_AUTH_KEY'] = 'an_auth_key'
+    allow(ENV).to receive(:[]).with('CF_EMAIL').and_return('an_email')
+    allow(ENV).to receive(:[]).with('CF_AUTH_KEY').and_return('an_auth_key')
 
     allow(Cf::Client).to receive(:new).and_return(client)
   end
