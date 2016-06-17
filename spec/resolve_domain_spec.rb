@@ -1,6 +1,6 @@
 require 'cf'
 
-describe 'Resolve domain' do
+RSpec.describe 'Resolve domain' do
   context 'when a domain is registered' do
     let(:domain) { 'cname.flywire.cc' }
     let(:destination) { ['peertransfer.me'] }
@@ -11,14 +11,6 @@ describe 'Resolve domain' do
 
     it 'resolves to right destination' do
       expect(resolve(domain)).to eq(destination)
-    end
-
-    def register_domain(domain, destination)
-      Cf.register(domain, destination, type)
-    end
-
-    def resolve(domain)
-      Cf.resolve(domain)
     end
   end
 
@@ -33,13 +25,13 @@ describe 'Resolve domain' do
     it 'resolves to right destination' do
       expect(resolve(domain)).to eq(destination)
     end
+  end
 
-    def register_domain(domain, destination)
-      Cf.register(domain, destination, type)
-    end
+  def register_domain(domain, destination)
+    Cf.register(domain, destination, type)
+  end
 
-    def resolve(domain)
-      Cf.resolve(domain)
-    end
+  def resolve(domain)
+    Cf.resolve(domain)
   end
 end

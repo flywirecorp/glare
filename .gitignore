@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 .envrc
+/spec/examples.txt

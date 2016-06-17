@@ -1,6 +1,6 @@
 require 'cf'
 
-describe Cf do
+RSpec.describe Cf do
   before do
     ENV['CF_EMAIL'] = 'an_email'
     ENV['CF_AUTH_KEY'] = 'an_auth_key'
