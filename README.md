@@ -2,6 +2,13 @@
 
 Ruby gem to interact with CloudFlare API v4
 
+## Build Status
+
+[![Build Status](https://travis-ci.org/peertransfer/cf.svg?branch=master)](https://travis-ci.org/peertransfer/cf)
+[![Coverage Status](https://coveralls.io/repos/github/peertransfer/cf/badge.svg?branch=master)](https://coveralls.io/github/peertransfer/cf?branch=master)
+[![Code Climate](https://codeclimate.com/github/peertransfer/cf/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/cf)
+[![Dependency Status](https://gemnasium.com/peertransfer/cf.svg)](https://gemnasium.com/peertransfer/cf)
+
 ## Installation
 
 Add this line to your application's Gemfile:
