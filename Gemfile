@@ -4,5 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'travis'
+  gem 'travis', require: false
+  gem 'coveralls', require: false
 end
