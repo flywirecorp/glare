@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['josacar@users.noreply.github.com', 'olopez@users.noreply.github.com']
 
   spec.summary       = 'API client for CloudFlare v4 API'
-  spec.homepage      = 'https://github.com/peertransfer/cf'
+  spec.homepage      = 'https://github.com/peertransfer/glare'
   spec.license       = 'MIT'
 
   files = Dir['lib/**/*.rb']
