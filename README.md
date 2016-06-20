@@ -4,17 +4,17 @@ Ruby gem to interact with CloudFlare API v4
 
 ## Build Status
 
-[![Build Status](https://travis-ci.org/peertransfer/cf.svg?branch=master)](https://travis-ci.org/peertransfer/cf)
-[![Coverage Status](https://coveralls.io/repos/github/peertransfer/glare/badge.svg?branch=master)](https://coveralls.io/github/peertransfer/cf?branch=master)
-[![Code Climate](https://codeclimate.com/github/peertransfer/glare/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/cf)
-[![Dependency Status](https://gemnasium.com/peertransfer/cf.svg)](https://gemnasium.com/peertransfer/cf)
+[![Build Status](https://travis-ci.org/peertransfer/glare.svg?branch=master)](https://travis-ci.org/peertransfer/glare)
+[![Coverage Status](https://coveralls.io/repos/github/peertransfer/glare/badge.svg?branch=master)](https://coveralls.io/github/peertransfer/glare?branch=master)
+[![Code Climate](https://codeclimate.com/github/peertransfer/glare/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/glare)
+[![Dependency Status](https://gemnasium.com/peertransfer/glare.svg)](https://gemnasium.com/peertransfer/glare)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'cf'
+gem 'glare'
 ```
 
 And then execute:
@@ -23,7 +23,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install cf
+    $ gem install glare
 
 ## Usage
 

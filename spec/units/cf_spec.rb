@@ -1,4 +1,4 @@
-require 'cf'
+require 'glare'
 
 RSpec.describe Glare do
   before do

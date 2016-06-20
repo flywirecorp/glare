@@ -1,4 +1,4 @@
-require 'cf'
+require 'glare'
 
 RSpec.describe 'delete domain' do
   context 'when a domain is registered' do
