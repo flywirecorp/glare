@@ -4,10 +4,6 @@ module Glare
       @result = result
     end
 
-    def ocurrences
-      result['result_info']['count'].to_i
-    end
-
     def first_result_id
       result['result'].first['id']
     end
