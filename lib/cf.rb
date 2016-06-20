@@ -37,8 +37,7 @@ module Cf
     end
 
     def contents
-      return if ocurrences == 0
-      result['result'].map { |item| item['content'] }
+      Array(result['result']).map { |item| item['content'] }
     end
 
     private
@@ -75,6 +74,10 @@ module Cf
       @records.count
     end
 
+    def each
+      @records.each { |record| yield(record) }
+    end
+
     def records_to_delete(targer_number)
       records_to_delete = count - targer_number
       return [] if records_to_delete < 0
@@ -109,6 +112,11 @@ module Cf
     def resolve(fqdn, type)
       client = build_client
       Domain.new(client).resolve(fqdn, type)
+    end
+
+    def deregister(fqdn, type)
+      client = build_client
+      Domain.new(client).deregister(fqdn, type)
     end
 
     private

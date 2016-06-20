@@ -198,6 +198,29 @@ RSpec.describe Cf do
     end
   end
 
+  describe '.delete' do
+    it 'deletes all records for a fqdn' do
+      allow(client).to receive(:get).
+        with('/zones', name: 'example.com').
+        and_return(zone_list)
+
+      allow(client).to receive(:get).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
+        name: 'wadus.example.com', type: 'CNAME'
+      ).and_return(wadus_records)
+
+      Cf.deregister('wadus.example.com', 'CNAME')
+
+      expect(client).to have_received(:delete).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e'
+      )
+
+      expect(client).to have_received(:delete).with(
+        '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/b3142498230989gsd0f88h80998908fc'
+      )
+    end
+  end
+
   def load_fixture(fixture)
     fixture_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures'))
     json = IO.read(File.join(fixture_dir, "#{fixture}.json"))

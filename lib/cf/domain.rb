@@ -38,7 +38,20 @@ module Cf
           update(zone_id, dns_records, existing_records)
         end
 
+        def deregister(client, zone, dns_records)
+          @client = client
+          zone_id = zone.id
+
+          delete(zone_id, dns_records)
+        end
+
         private
+
+        def delete(zone_id, dns_records)
+          dns_records.each do |record|
+            @client.delete("/zones/#{zone_id}/dns_records/#{record.id}")
+          end
+        end
 
         def update(zone_id, dns_records, existing_records)
           update_current_records(zone_id, dns_records, existing_records)
@@ -91,6 +104,12 @@ module Cf
       zone = Zone.new(@client, fqdn)
       result = zone.records(type)
       result.contents
+    end
+
+    def deregister(fqdn, type)
+      zone = Zone.new(@client, fqdn)
+      dns_records = zone.records(type)
+      Record.deregister(@client, zone, dns_records)
     end
   end
 end
