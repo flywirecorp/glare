@@ -29,7 +29,40 @@ Or install it yourself as:
 
 ### Create/update DNS record
 
+```ruby
+require 'glare'
+
+Glare.register('example.domain.com', 'destination.com' ,'CNAME')
+```
+
+Where:
+  - `example.domain.com`: Name of the record to create
+  - `destination.com`: Name(s) of the values of the record
+  - `CNAME`: Type of the DNS record
+
 ### Delete DNS record
+
+```ruby
+require 'glare'
+
+Glare.deregister('example.domain.com', 'CNAME')
+```
+
+Where:
+  - `example.domain.com`: Name of the record to destroy
+  - `CNAME`: Type of the DNS record
+
+### Resolve DNS record
+
+```ruby
+require 'glare'
+
+Glare.resolve('example.domain.com', 'CNAME')
+```
+
+Where:
+  - `example.domain.com`: Name of the record to resolve
+  - `CNAME`: Type of the DNS record
 
 ## Development
 
