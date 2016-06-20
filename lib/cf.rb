@@ -1,13 +1,13 @@
 require 'public_suffix'
-require 'cf/version'
-require 'cf/credentials'
-require 'cf/client'
-require 'cf/domain'
-require 'cf/result'
-require 'cf/dns_record'
-require 'cf/dns_records'
+require 'glare/version'
+require 'glare/credentials'
+require 'glare/client'
+require 'glare/domain'
+require 'glare/result'
+require 'glare/dns_record'
+require 'glare/dns_records'
 
-module Cf
+module Glare
   class << self
     def register(fqdn, destination, type)
       client = build_client
@@ -30,7 +30,7 @@ module Cf
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
 
     def client(credentials)
-      Cf::Client.new(credentials.email, credentials.auth_key)
+      Glare::Client.new(credentials.email, credentials.auth_key)
     end
 
     def default_credentials

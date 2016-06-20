@@ -17,14 +17,14 @@ RSpec.describe 'delete domain' do
   end
 
   def delete(domain)
-    Cf.deregister(domain, type)
+    Glare.deregister(domain, type)
   end
 
   def resolve(domain)
-    Cf.resolve(domain, type)
+    Glare.resolve(domain, type)
   end
 
   def register_domain(domain, destination)
-    Cf.register(domain, destination, type)
+    Glare.register(domain, destination, type)
   end
 end

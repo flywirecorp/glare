@@ -1,4 +1,4 @@
-module Cf
+module Glare
   class CfDnsRecord
     def initialize(id:, name:, type:, content:)
       @id = id

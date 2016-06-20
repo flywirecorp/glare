@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cf/version'
+require 'glare/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'cf'
-  spec.version       = Cf::VERSION
+  spec.version       = Glare::VERSION
   spec.authors       = ['Jose Luis Salas', 'Omar Lopez']
   spec.email         = ['josacar@users.noreply.github.com', 'olopez@users.noreply.github.com']
 

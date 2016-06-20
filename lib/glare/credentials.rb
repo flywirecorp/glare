@@ -1,4 +1,4 @@
-module Cf
+module Glare
   class Credentials
     def initialize(email, auth_key)
       @email = email

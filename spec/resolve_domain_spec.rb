@@ -47,10 +47,10 @@ RSpec.describe 'Resolve domain' do
   end
 
   def register_domain(domain, destination)
-    Cf.register(domain, destination, type)
+    Glare.register(domain, destination, type)
   end
 
   def resolve(domain)
-    Cf.resolve(domain, type)
+    Glare.resolve(domain, type)
   end
 end

@@ -1,6 +1,6 @@
 require 'jsonclient'
 
-module Cf
+module Glare
   class Client
     BASE_URL = 'https://api.cloudflare.com/client/v4'.freeze
 

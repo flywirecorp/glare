@@ -1,12 +1,12 @@
-# Cf
+# Glare
 
 Ruby gem to interact with CloudFlare API v4
 
 ## Build Status
 
 [![Build Status](https://travis-ci.org/peertransfer/cf.svg?branch=master)](https://travis-ci.org/peertransfer/cf)
-[![Coverage Status](https://coveralls.io/repos/github/peertransfer/cf/badge.svg?branch=master)](https://coveralls.io/github/peertransfer/cf?branch=master)
-[![Code Climate](https://codeclimate.com/github/peertransfer/cf/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/cf)
+[![Coverage Status](https://coveralls.io/repos/github/peertransfer/glare/badge.svg?branch=master)](https://coveralls.io/github/peertransfer/cf?branch=master)
+[![Code Climate](https://codeclimate.com/github/peertransfer/glare/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/cf)
 [![Dependency Status](https://gemnasium.com/peertransfer/cf.svg)](https://gemnasium.com/peertransfer/cf)
 
 ## Installation
@@ -39,7 +39,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/peertransfer/cf/fork )
+1. Fork it ( https://github.com/peertransfer/glare/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

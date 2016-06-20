@@ -1,4 +1,4 @@
-module Cf
+module Glare
   class Result
     def initialize(result)
       @result = result

@@ -1,4 +1,4 @@
-module Cf
+module Glare
   class Domain
     class Zone
       def initialize(client, fqdn)

@@ -1,4 +1,4 @@
-module Cf
+module Glare
   class DnsRecord
     def initialize(name:, type:, content:)
       @name = name
