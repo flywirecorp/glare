@@ -36,18 +36,9 @@ module Cf
       result['result'].first['id']
     end
 
-    def first_result_content
-      return if ocurrences == 0
-      result['result'].first['content']
-    end
-
     def contents
       return if ocurrences == 0
       result['result'].map { |item| item['content'] }
-    end
-
-    def ids
-      result['result'].map { |item| item['id'] }
     end
 
     private
