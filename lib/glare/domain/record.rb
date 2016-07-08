@@ -32,7 +32,7 @@ module Glare
         end
 
         def update_current_records(zone_id, dns_records, existing_records)
-          records_to_update = existing_records.records_to_update(dns_records)
+          records_to_update = existing_records.to_update(dns_records)
           updates = records_to_update.zip(dns_records)
           updates.each do |existing_record, dns_record|
             @client.put("/zones/#{zone_id}/dns_records/#{existing_record.id}", dns_record.to_h)
@@ -40,14 +40,14 @@ module Glare
         end
 
         def delete_uneeded_records(zone_id, dns_records, existing_records)
-          records_to_delete = existing_records.records_to_delete(dns_records.count)
+          records_to_delete = existing_records.to_delete(dns_records.count)
           records_to_delete.each do |record|
             @client.delete("/zones/#{zone_id}/dns_records/#{record.id}")
           end
         end
 
         def create_new_records(zone_id, dns_records, existing_records)
-          records_to_create = existing_records.records_to_create(dns_records)
+          records_to_create = existing_records.to_create(dns_records)
           create(zone_id, records_to_create)
         end
 

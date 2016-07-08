@@ -30,7 +30,7 @@ module Glare
       @records = records
     end
 
-    def records_to_update(desired_records)
+    def to_update(desired_records)
       @records.reject do |record|
         desired_records.any? { |r| r.content == record.content }
       end
@@ -48,14 +48,14 @@ module Glare
       @records.each { |record| yield(record) }
     end
 
-    def records_to_delete(target_number)
+    def to_delete(target_number)
       records_to_delete = count - target_number
       return CfDnsRecords.new([]) if records_to_delete < 0
 
-      @records.pop(records_to_delete)
+      @records.last(records_to_delete)
     end
 
-    def records_to_create(desired_records)
+    def to_create(desired_records)
       desired_records.drop(count)
     end
   end

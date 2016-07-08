@@ -4,14 +4,6 @@ module Glare
       @response = response
     end
 
-    def first_result_id
-      result.first['id']
-    end
-
-    def contents
-      result.map { |item| item['content'] }
-    end
-
     def result
       content['result']
     end
