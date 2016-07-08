@@ -12,9 +12,9 @@ module Glare
   class CfDnsRecords
     def self.from_result(api_result)
       response = ApiResponse.new(api_result)
-      content = response.result
+      result = response.result
 
-      records = content['result'].map do |item|
+      records = result.map do |item|
         CfDnsRecord.new(
           id: item['id'],
           name: item['name'],

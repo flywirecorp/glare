@@ -1,19 +1,25 @@
 module Glare
   class ApiResponse
-    def initialize(result)
-      @result = result
+    def initialize(response)
+      @response = response
     end
 
     def first_result_id
-      result['result'].first['id']
+      result.first['id']
     end
 
     def contents
-      Array(result['result']).map { |item| item['content'] }
+      result.map { |item| item['content'] }
     end
 
     def result
-      @result.content
+      content['result']
+    end
+
+    private
+
+    def content
+      @response.content
     end
   end
   private_constant :ApiResponse
