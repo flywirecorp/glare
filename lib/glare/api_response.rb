@@ -1,5 +1,5 @@
 module Glare
-  class Result
+  class ApiResponse
     def initialize(result)
       @result = result
     end
@@ -12,11 +12,9 @@ module Glare
       Array(result['result']).map { |item| item['content'] }
     end
 
-    private
-
     def result
       @result.content
     end
   end
-  private_constant :Result
+  private_constant :ApiResponse
 end

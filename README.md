@@ -27,6 +27,15 @@ Or install it yourself as:
 
 ## Usage
 
+In order to configure credentials used to interact with Cloudflare API you will need to setup the following environment variables:
+
+- `CF_EMAIL`: Email used to create a Cloudflare account
+- `CF_AUTH_KEY`: Auth key of the given user
+
+Additionally, you can set other environment variables:
+
+- `CF_DEBUG`: Set to `1` to enable HTTP requests' debug
+
 ### Create/update DNS record
 
 ```ruby

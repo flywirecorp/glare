@@ -9,9 +9,24 @@ module Glare
     attr_reader :id, :name, :type, :content
   end
 
-  class DnsRecords < Result
-    def initialize(result)
-      super(result)
+  class CfDnsRecords
+    def self.from_result(api_result)
+      response = ApiResponse.new(api_result)
+      content = response.result
+
+      records = content['result'].map do |item|
+        CfDnsRecord.new(
+          id: item['id'],
+          name: item['name'],
+          type: item['type'],
+          content: item['content']
+        )
+      end
+
+      new(records)
+    end
+
+    def initialize(records)
       @records = records
     end
 
@@ -25,32 +40,23 @@ module Glare
       @records.count
     end
 
+    def contents
+      @records.map(&:content)
+    end
+
     def each
       @records.each { |record| yield(record) }
     end
 
-    def records_to_delete(targer_number)
-      records_to_delete = count - targer_number
-      return [] if records_to_delete < 0
+    def records_to_delete(target_number)
+      records_to_delete = count - target_number
+      return CfDnsRecords.new([]) if records_to_delete < 0
 
       @records.pop(records_to_delete)
     end
 
     def records_to_create(desired_records)
       desired_records.drop(count)
-    end
-
-    private
-
-    def records
-      result['result'].map do |item|
-        CfDnsRecord.new(
-          id: item['id'],
-          name: item['name'],
-          type: item['type'],
-          content: item['content']
-        )
-      end
     end
   end
 end
