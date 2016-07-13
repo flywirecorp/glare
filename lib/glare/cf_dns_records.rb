@@ -10,20 +10,26 @@ module Glare
   end
 
   class CfDnsRecords
-    def self.from_result(api_result)
-      response = ApiResponse.new(api_result)
-      result = response.result
+    class << self
+      def from_result(api_result)
+        response = ApiResponse.new(api_result)
+        result = response.result
 
-      records = result.map do |item|
-        CfDnsRecord.new(
-          id: item['id'],
-          name: item['name'],
-          type: item['type'],
-          content: item['content']
-        )
+        records = result.map do |item|
+          CfDnsRecord.new(
+            id: item['id'],
+            name: item['name'],
+            type: item['type'],
+            content: item['content']
+          )
+        end
+
+        new(records)
       end
 
-      new(records)
+      def empty
+        new([])
+      end
     end
 
     def initialize(records)
@@ -50,7 +56,7 @@ module Glare
 
     def to_delete(target_number)
       records_to_delete = count - target_number
-      return CfDnsRecords.new([]) if records_to_delete < 0
+      return CfDnsRecords.empty if records_to_delete < 0
 
       @records.last(records_to_delete)
     end
