@@ -6,7 +6,6 @@ module Glare
 
     def initialize(email, auth_key)
       @headers = {
-        'Content-Type' => 'application/json',
         'X-Auth-Email' => email,
         'X-Auth-Key' => auth_key
       }

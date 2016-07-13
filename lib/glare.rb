@@ -3,9 +3,9 @@ require 'glare/version'
 require 'glare/credentials'
 require 'glare/client'
 require 'glare/domain'
-require 'glare/result'
+require 'glare/api_response'
 require 'glare/dns_record'
-require 'glare/dns_records'
+require 'glare/cf_dns_records'
 
 module Glare
   class << self
