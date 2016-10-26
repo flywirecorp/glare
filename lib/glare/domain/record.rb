@@ -26,8 +26,8 @@ module Glare
         end
 
         def update(zone_id, dns_records, existing_records)
-          update_current_records(zone_id, dns_records, existing_records)
           delete_uneeded_records(zone_id, dns_records, existing_records)
+          update_current_records(zone_id, dns_records, existing_records)
           create_new_records(zone_id, dns_records, existing_records)
         end
 
