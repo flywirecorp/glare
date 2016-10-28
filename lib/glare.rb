@@ -6,6 +6,7 @@ require 'glare/domain'
 require 'glare/api_response'
 require 'glare/dns_record'
 require 'glare/cf_dns_records'
+require 'glare/errors'
 
 module Glare
   class << self

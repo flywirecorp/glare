@@ -1,11 +1,11 @@
 require 'glare/domain/cf_zones'
+require 'glare/errors'
 
 module Glare
   class Domain
     class CfZones
       def self.from_result(api_response)
-        response = ApiResponse.new(api_response)
-        result = response.result
+        result = api_response.result
 
         zones = result.map do |item|
           CfZone.new(
@@ -21,8 +21,9 @@ module Glare
         @zones = zones
       end
 
-      def first
-        @zones.first
+      def first_id
+        raise ::Glare::Errors::NotExistingZoneError.new if @zones.empty?
+        @zones.first.id
       end
     end
 

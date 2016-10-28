@@ -8,9 +8,9 @@ RSpec.describe Glare do
     allow(Glare::Client).to receive(:new).and_return(client)
   end
   let(:client) { spy(Glare::Client) }
-  let(:zone_list) { load_fixture('list_zone') }
-  let(:empty_result) { load_fixture('empty_result') }
-  let(:wadus_records) { load_fixture('wadus_records') }
+  let(:zone_list) { Glare::ApiResponse.new(load_fixture('list_zone')) }
+  let(:empty_result) { Glare::ApiResponse.new(load_fixture('empty_result')) }
+  let(:wadus_records) { Glare::ApiResponse.new(load_fixture('wadus_records')) }
 
   describe '.resolve' do
     it 'resolves a fqdn' do
