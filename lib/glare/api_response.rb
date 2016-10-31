@@ -8,19 +8,11 @@ module Glare
       content['result']
     end
 
-    def valid!
-      raise Glare::Errors::ApiError unless success?
-      self
-    end
-
     private
-
-    def success?
-      content['success']
-    end
 
     def content
       @response.content
     end
   end
+  private_constant :ApiResponse
 end

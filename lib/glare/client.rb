@@ -1,5 +1,4 @@
 require 'jsonclient'
-require 'glare/api_response'
 
 module Glare
   class Client
@@ -15,19 +14,19 @@ module Glare
     end
 
     def get(query, params)
-      ApiResponse.new(@http.get(BASE_URL + query, params, @headers)).valid!
+      @http.get(BASE_URL + query, params, @headers)
     end
 
     def post(query, data)
-      ApiResponse.new(@http.post(BASE_URL + query, data, @headers)).valid!
+      @http.post(BASE_URL + query, data, @headers)
     end
 
     def put(query, data)
-      ApiResponse.new(@http.put(BASE_URL + query, data, @headers)).valid!
+      @http.put(BASE_URL + query, data, @headers)
     end
 
     def delete(query, params=nil)
-      ApiResponse.new(@http.delete(BASE_URL + query, params, @headers)).valid!
+      @http.delete(BASE_URL + query, params, @headers)
     end
   end
 end

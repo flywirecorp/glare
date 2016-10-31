@@ -11,8 +11,9 @@ module Glare
 
   class CfDnsRecords
     class << self
-      def from_result(api_response)
-        result = api_response.result
+      def from_result(api_result)
+        response = ApiResponse.new(api_result)
+        result = response.result
 
         records = result.map do |item|
           CfDnsRecord.new(
@@ -36,9 +37,7 @@ module Glare
     end
 
     def to_update(desired_records)
-      records_to_update = desired_records.count
-      records = @records.first(records_to_update)
-      records.reject do |record|
+      @records.reject do |record|
         desired_records.any? { |r| r.content == record.content }
       end
     end

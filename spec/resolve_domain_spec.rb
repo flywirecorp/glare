@@ -5,25 +5,12 @@ RSpec.describe 'Resolve domain' do
     let(:domain) { 'cname.flywire.cc' }
     let(:destination) { ['peertransfer.me'] }
     let(:type) { 'CNAME' }
+    before do
+      register_domain(domain, destination)
+    end
 
     it 'resolves to right destination' do
-      register_domain(domain, destination)
-
       expect(resolve(domain)).to eq(destination)
-    end
-
-    it 'raises an exception if domain does not exist in account' do
-      register_domain(domain, destination)
-
-      expect do
-        resolve('error.ojete.cc')
-      end.to raise_error(Glare::Errors::NotExistingZoneError)
-    end
-
-    it 'raises an exception if api returns error' do
-      expect do
-        register_domain('error.flywire.cc', '1.1.1.1')
-      end.to raise_error(Glare::Errors::ApiError)
     end
   end
 
