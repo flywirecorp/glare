@@ -31,9 +31,9 @@ module Glare
           create_new_records(zone_id, dns_records, existing_records)
         end
 
-        def update_current_records(zone_id, dns_records, existing_records)
-          records_to_update = existing_records.to_update(dns_records)
-          updates = records_to_update.zip(dns_records)
+        def update_current_records(zone_id, new_records, existing_records)
+          records_to_update = existing_records.to_update(new_records)
+          updates = records_to_update.zip(new_records - existing_records.to_a)
           updates.each do |existing_record, dns_record|
             @client.put("/zones/#{zone_id}/dns_records/#{existing_record.id}", dns_record.to_h)
           end
