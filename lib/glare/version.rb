@@ -1,3 +1,3 @@
 module Glare
-  VERSION = '0.1.2'.freeze
+  VERSION = '0.3.0'.freeze
 end
