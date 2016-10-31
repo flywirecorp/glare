@@ -36,16 +36,11 @@ module Glare
     end
 
     def to_update(desired_records)
-      records_to_update = @records - desired_records
-      records_to_update.first(desired_records.count)
-    end
-
-    def -(records)
-      @records.reject { |record| records.any? { |r| r.content == record.content } }
-    end
-
-    def to_a
-      @records.dup
+      records_to_update = desired_records.count
+      records = @records.first(records_to_update)
+      records.reject do |record|
+        desired_records.any? { |r| r.content == record.content }
+      end
     end
 
     def count
