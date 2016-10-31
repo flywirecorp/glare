@@ -1,5 +1,3 @@
-require 'glare/errors'
-
 module Glare
   class ApiResponse
     def initialize(response)
@@ -11,7 +9,7 @@ module Glare
     end
 
     def valid!
-      raise Glare::Errors::ApiError.new(errors) unless success?
+      raise Glare::Errors::ApiError unless success?
       self
     end
 
@@ -23,10 +21,6 @@ module Glare
 
     def content
       @response.content
-    end
-
-    def errors
-      content['errors'].map { |e| e['message'] }.join(',')
     end
   end
 end
