@@ -95,3 +95,9 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+def load_fixture(fixture)
+  fixture_dir = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures'))
+  json = IO.read(File.join(fixture_dir, "#{fixture}.json"))
+  ::HTTP::Message.new_response(JSON.parse(json))
+end
