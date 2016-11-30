@@ -1,0 +1,48 @@
+{
+  "errors": [],
+  "messages": [],
+  "result": [
+    {
+      "content": "another_destination.com",
+      "created_on": "2016-05-12T11:53:49.233342Z",
+      "id": "b3142498230989gsd0f88h80998908fc",
+      "locked": false,
+      "meta": {
+        "auto_added": false
+      },
+      "modified_on": "2016-05-12T11:53:49.233342Z",
+      "name": "wadus.example.com",
+      "proxiable": true,
+      "proxied": false,
+      "ttl": 1,
+      "type": "CNAME",
+      "zone_id": "9de4eb694c380d79845d35cd939cc7a7",
+      "zone_name": "example.com"
+    },
+    {
+      "content": "destination.com",
+      "created_on": "2016-05-12T11:53:49.233342Z",
+      "id": "a1f984afe5544840505494298f54c33e",
+      "locked": false,
+      "meta": {
+        "auto_added": false
+      },
+      "modified_on": "2016-05-12T11:53:49.233342Z",
+      "name": "wadus.example.com",
+      "proxiable": true,
+      "proxied": false,
+      "ttl": 1,
+      "type": "CNAME",
+      "zone_id": "9de4eb694c380d79845d35cd939cc7a7",
+      "zone_name": "example.com"
+    }
+  ],
+  "result_info": {
+    "count": 2,
+    "page": 1,
+    "per_page": 20,
+    "total_count": 1,
+    "total_pages": 1
+  },
+  "success": true
+}

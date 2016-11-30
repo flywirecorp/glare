@@ -1,19 +1,11 @@
-module Glare
-  class CfDnsRecord
-    def initialize(id:, name:, type:, content:)
-      @id = id
-      @name = name
-      @type = type
-      @content = content
-    end
-    attr_reader :id, :name, :type, :content
-  end
+require 'glare/cf_dns_record'
+require 'glare/cf_dns_records/updater'
 
+module Glare
   class CfDnsRecords
     class << self
-      def from_result(api_result)
-        response = ApiResponse.new(api_result)
-        result = response.result
+      def from_result(api_response)
+        result = api_response.result
 
         records = result.map do |item|
           CfDnsRecord.new(
@@ -36,14 +28,12 @@ module Glare
       @records = records
     end
 
-    def to_update(desired_records)
-      @records.reject do |record|
-        desired_records.any? { |r| r.content == record.content }
-      end
+    def calculate(desired_records)
+      Updater.new(@records.dup, desired_records.dup).calculate
     end
 
-    def count
-      @records.count
+    def dup
+      CfDnsRecords.new(@records.dup)
     end
 
     def contents
@@ -54,15 +44,16 @@ module Glare
       @records.each { |record| yield(record) }
     end
 
-    def to_delete(target_number)
-      records_to_delete = count - target_number
-      return CfDnsRecords.empty if records_to_delete < 0
-
-      @records.last(records_to_delete)
+    def map
+      @records.map { |record| yield(record) }
     end
 
-    def to_create(desired_records)
-      desired_records.drop(count)
+    def any?
+      @records.any? { |record| yield(record) }
+    end
+
+    def delete_if
+      @records.delete_if { |record| yield(record) }
     end
   end
 end
