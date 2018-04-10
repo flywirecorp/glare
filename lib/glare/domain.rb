@@ -7,9 +7,9 @@ module Glare
       @client = client
     end
 
-    def register(fqdn, destinations, type)
+    def register(fqdn, destinations, type, proxied = false)
       dns_records = Array(destinations).map do |destination|
-        DnsRecord.new(type: type, name: fqdn, content: destination)
+        DnsRecord.new(type: type, name: fqdn, content: destination, proxied: proxied)
       end
 
       zone = Zone.new(@client, fqdn)
