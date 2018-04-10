@@ -7,7 +7,7 @@ module Glare
           existing_records = zone.records(dns_records.first.type)
           zone_id = zone.id
 
-          update(zone_id, dns_records, existing_records, proxied)
+          update(zone_id, dns_records, existing_records)
         end
 
         def deregister(client, zone, dns_records)
