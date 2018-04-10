@@ -10,9 +10,9 @@ require 'glare/errors'
 
 module Glare
   class << self
-    def register(fqdn, destination, type)
+    def register(fqdn, destination, type, proxied = false)
       client = build_client
-      Domain.new(client).register(fqdn, destination, type)
+      Domain.new(client).register(fqdn, destination, type, proxied)
     end
 
     def resolve(fqdn, type)
