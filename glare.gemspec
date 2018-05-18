@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.9'
-  spec.add_development_dependency 'rake', '~> 11.0'
-  spec.add_development_dependency 'rspec', '~> 3.4'
+  spec.add_development_dependency 'rake', '~> 12.3'
+  spec.add_development_dependency 'rspec', '~> 3.7'
 
-  spec.add_dependency 'public_suffix'
-  spec.add_dependency 'httpclient'
+  spec.add_dependency 'public_suffix', '>= 3.0.2', '< 4.0'
+  spec.add_dependency 'httpclient', '>= 2.8.3', '< 3.0'
 end

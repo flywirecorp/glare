@@ -1,8 +1,8 @@
 require 'glare'
 
-RSpec.describe 'delete domain' do
+RSpec.describe 'delete domain', integration: true do
   context 'when a domain is registered' do
-    let(:domain) { 'a.flywire.cc' }
+    let(:domain) { 'a.flywire.com.cn' }
     let(:type) { 'A' }
     let(:destination) { ['1.2.3.5', '6.7.8.9'] }
     before do

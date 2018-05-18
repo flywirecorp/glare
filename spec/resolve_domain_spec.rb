@@ -1,8 +1,8 @@
 require 'glare'
 
-RSpec.describe 'Resolve domain' do
+RSpec.describe 'Resolve domain', integration: true do
   context 'when a domain is registered' do
-    let(:domain) { 'cname.flywire.cc' }
+    let(:domain) { 'cname.flywire.com.cn' }
     let(:destination) { ['peertransfer.me'] }
     let(:type) { 'CNAME' }
 
@@ -22,13 +22,13 @@ RSpec.describe 'Resolve domain' do
 
     it 'raises an exception if api returns error' do
       expect do
-        register_domain('error.flywire.cc', '1.1.1.1')
+        register_domain('error.flywire.com.cn', '1.1.1.1')
       end.to raise_error(Glare::Errors::ApiError)
     end
   end
 
   context 'when a domain contains more than one destination' do
-    let(:domain) { 'a.flywire.cc' }
+    let(:domain) { 'a.flywire.com.cn' }
     let(:type) { 'A' }
     before do
       register_domain(domain, destination)
