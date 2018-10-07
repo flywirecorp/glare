@@ -12,7 +12,8 @@ module Glare
             id: item['id'],
             name: item['name'],
             type: item['type'],
-            content: item['content']
+            content: item['content'],
+            proxied: item['proxied']
           )
         end
 

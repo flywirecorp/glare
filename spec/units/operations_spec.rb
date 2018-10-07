@@ -21,7 +21,7 @@ RSpec.describe Glare::CfDnsRecords::Updater do
     expect(operations.count).to be_zero
   end
 
-  it 'can detects new records to add when there are some records' do
+  it 'can detect new records to add when there are some records' do
     current_record = existing_record(content: '1.2.3.4')
     current_records = Glare::CfDnsRecords.new([current_record])
 
@@ -44,10 +44,9 @@ RSpec.describe Glare::CfDnsRecords::Updater do
     new_records = [update_record, new_record].shuffle
 
     operations = Glare::CfDnsRecords::Updater.new(current_records, new_records).calculate
-    add_operation = Glare::CfDnsRecords::Updater::Operation.new(new_record, :add)
+    add_operation = Glare::CfDnsRecords::Updater::Operation.new(new_records.last, :add)
 
-    current_record.content = '1.2.3.6'
-    update_operation = Glare::CfDnsRecords::Updater::Operation.new(current_record, :update)
+    update_operation = Glare::CfDnsRecords::Updater::Operation.new(new_records.first, :update)
 
     expect(operations.insertions).to eq([add_operation])
     expect(operations.updates).to eq([update_operation])

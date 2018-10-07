@@ -2,7 +2,7 @@ module Glare
   class Domain
     class Record
       class << self
-        def register(client, zone, dns_records)
+        def register(client, zone, dns_records, proxied = false)
           @client = client
           existing_records = zone.records(dns_records.first.type)
           zone_id = zone.id
