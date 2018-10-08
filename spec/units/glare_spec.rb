@@ -92,7 +92,7 @@ RSpec.describe Glare do
 
       expect(client).to have_received(:post).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination'
+        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination', proxied: false
       )
     end
 
@@ -109,12 +109,12 @@ RSpec.describe Glare do
 
       expect(client).to have_received(:post).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination'
+        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination', proxied: false
       )
 
       expect(client).to have_received(:post).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        type: 'CNAME', name: 'not-exist.example.com', content: 'another_destination'
+        type: 'CNAME', name: 'not-exist.example.com', content: 'another_destination', proxied: false
       )
     end
 
@@ -155,7 +155,7 @@ RSpec.describe Glare do
 
             expect(client).to have_received(:put).with(
               '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
-              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com'
+              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false
             )
 
             expect(client).not_to have_received(:put).with(
@@ -174,12 +174,12 @@ RSpec.describe Glare do
 
             expect(client).to have_received(:put).with(
               any_args,
-              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com'
+              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false
             )
 
             expect(client).to have_received(:put).with(
               any_args,
-              type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com'
+              type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com', proxied: false
             )
           end
         end
@@ -194,7 +194,7 @@ RSpec.describe Glare do
 
         expect(client).to have_received(:put).with(
           any_args,
-          { type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com' }
+          { type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false }
         )
 
         expect(client).to have_received(:delete).once
@@ -215,7 +215,7 @@ RSpec.describe Glare do
 
         expect(client).to have_received(:post).with(
           '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-          type: 'CNAME', name: 'wadus.example.com', content: 'a_third_destination.com'
+          type: 'CNAME', name: 'wadus.example.com', content: 'a_third_destination.com', proxied: false
         )
       end
     end

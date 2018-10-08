@@ -28,16 +28,14 @@ module Glare
       end
 
       class Operation
-        include Comparable
-
         def initialize(record, action)
           @record = record.dup
           @action = action
         end
 
-        def <=>(operation)
-          @record <=> operation.record &&
-            @action <=> operation.action
+        def ==(operation)
+          @record == operation.record &&
+            @action == operation.action
         end
 
         attr_reader :action, :record
