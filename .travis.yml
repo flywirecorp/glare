@@ -3,10 +3,10 @@ rvm:
 - 2.3.7
 - 2.4.4
 - 2.5.1
+- 2.6.3
 - jruby
 script:
 - if [ "$TRAVIS_REPO_SLUG" != "peertransfer/glare" ]; then rake spec:unit; fi
-before_install: gem install bundler -v 1.16.1
 env:
   global:
   - secure: VvUXF0jh/Etc5bDredzC52PrH9163PlaeITIib7l6PP1tFWoqRER08JFq11Zft6b8O+4WwaMAI+4laGrK7bZNHdMWMNAeutUoZuzLE6doYgAPET56MBGgha1k+jGL2K0vrjQoV2ITIu+Hr0IG/MM92AXkWUIryrFHI41M++1VklXXNn+8VWk7ubae2Mq/KmpIu94N3G/7Rj0PyJ8PHDK/bppq3kgnFyvQvgFTNOqhbAnB8GXz44StVDa9EbdNQN0SBHWdAJBNyEEDpHbtSLDWc8o3e0hLlzTpH+KmsV3WhxLR0STGI8Ji3L9ebXGgXqaR8SRCL96g1pG6RBN7O554svXsvgfqMDQzAQ3xdtTSnmajYOPmgDPXxnC60Vuw4Zg415meL4efZYkhjNZmUJQFCeuaw3nr++c6E5GY5jA4eoBJnf8dxKt+tqSUCvE66JMjWj5mJBGKPHfIYEmlMPJgeSA5xB6+EYE9z18OUcpPx8tboeBD2ZgZKWk+kyviygzprgcSCz1WSNUcoMMOccvy0Yp5kJyPdP+zdMHfLximA5iuOYfK95jgFRfFQygk1UEjskffpH62Ty+DnAQFRxRxmz7rFJphlDryaPjUkzmwmHNw/Jyroo0Ke4KZZ498xQdVzWbHHncKe9QNqyCQ5gbgxLA1yLazjub0VypJP90vp8=
