@@ -71,20 +71,23 @@ RSpec.describe Glare::CfDnsRecords::Updater do
     current_records = Glare::CfDnsRecords.new([current_record2, current_record, current_record3])
 
     new_record = dns_record(content: '1.2.3.8')
-    update_record = dns_record(content: '1.2.3.4')
+    update_record = dns_record(content: '1.2.3.4', proxied: true)
     new_records = [new_record, update_record].shuffle
 
     operations = Glare::CfDnsRecords::Updater.new(current_records, new_records).calculate
 
-    current_record2.content = '1.2.3.8'
-    update_operation = Glare::CfDnsRecords::Updater::Operation.new(current_record2, :update)
+    updated_record = current_record.dup.tap { |r| r.proxied = true }
+    updated_record2 = current_record2.dup.tap { |r| r.content = '1.2.3.8' }
+
+    update_operation = Glare::CfDnsRecords::Updater::Operation.new(updated_record2, :update)
+    update_operation2 = Glare::CfDnsRecords::Updater::Operation.new(updated_record, :update)
     delete_operation = Glare::CfDnsRecords::Updater::Operation.new(current_record3, :delete)
 
-    expect(operations.updates).to eq([update_operation])
-    expect(operations.deletions).to eq([delete_operation])
+    expect(operations.updates).to match_array([update_operation, update_operation2])
+    expect(operations.deletions).to match_array([delete_operation])
   end
 
-  it 'can detects new records to delete and update' do
+  it 'can detect new records to delete and update' do
     current_record = existing_record(content: '1.2.3.4')
     current_record2 = existing_record(content: '1.2.3.6')
     current_record3 = existing_record(content: '1.2.3.5')
@@ -104,7 +107,7 @@ RSpec.describe Glare::CfDnsRecords::Updater do
     Glare::CfDnsRecord.new(id: id, name: name, type: type, content: content)
   end
 
-  def dns_record(name: 'name', type: 'A', content:)
-    Glare::DnsRecord.new(name: name, type: type, content: content)
+  def dns_record(name: 'name', type: 'A', content:, proxied: false)
+    Glare::DnsRecord.new(name: name, type: type, content: content, proxied: proxied)
   end
 end

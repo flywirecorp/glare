@@ -35,8 +35,8 @@ module Glare
     end
 
     def default_credentials
-      email = ENV[CF_EMAIL]
-      auth_key = ENV[CF_AUTH_KEY]
+      email = ENV.fetch(CF_EMAIL)
+      auth_key = ENV.fetch(CF_AUTH_KEY)
       Credentials.new(email, auth_key)
     end
 
