@@ -25,6 +25,11 @@ module Glare
       Domain.new(client).deregister(fqdn, type)
     end
 
+    def proxied?(fqdn, type)
+      client = build_client
+      Domain.new(client).proxied?(fqdn, type)
+    end
+
     private
 
     CF_EMAIL = 'CF_EMAIL'.freeze

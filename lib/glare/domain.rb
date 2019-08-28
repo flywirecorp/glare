@@ -27,5 +27,11 @@ module Glare
       dns_records = zone.records(type)
       Record.deregister(@client, zone, dns_records)
     end
+
+    def proxied?(fqdn, type)
+      zone = Zone.new(@client, fqdn)
+      records = zone.records(type)
+      records.all_proxied?
+    end
   end
 end
