@@ -1,21 +1,29 @@
 language: ruby
 rvm:
-- 2.3.7
-- 2.4.4
-- 2.5.1
+- 2.3.8
+- 2.4.5
+- 2.5.3
 - 2.6.3
 - jruby
-script:
-- if [ "$TRAVIS_REPO_SLUG" != "peertransfer/glare" ]; then rake spec:unit; fi
+script: rake spec:unit
 env:
   global:
   - secure: VvUXF0jh/Etc5bDredzC52PrH9163PlaeITIib7l6PP1tFWoqRER08JFq11Zft6b8O+4WwaMAI+4laGrK7bZNHdMWMNAeutUoZuzLE6doYgAPET56MBGgha1k+jGL2K0vrjQoV2ITIu+Hr0IG/MM92AXkWUIryrFHI41M++1VklXXNn+8VWk7ubae2Mq/KmpIu94N3G/7Rj0PyJ8PHDK/bppq3kgnFyvQvgFTNOqhbAnB8GXz44StVDa9EbdNQN0SBHWdAJBNyEEDpHbtSLDWc8o3e0hLlzTpH+KmsV3WhxLR0STGI8Ji3L9ebXGgXqaR8SRCL96g1pG6RBN7O554svXsvgfqMDQzAQ3xdtTSnmajYOPmgDPXxnC60Vuw4Zg415meL4efZYkhjNZmUJQFCeuaw3nr++c6E5GY5jA4eoBJnf8dxKt+tqSUCvE66JMjWj5mJBGKPHfIYEmlMPJgeSA5xB6+EYE9z18OUcpPx8tboeBD2ZgZKWk+kyviygzprgcSCz1WSNUcoMMOccvy0Yp5kJyPdP+zdMHfLximA5iuOYfK95jgFRfFQygk1UEjskffpH62Ty+DnAQFRxRxmz7rFJphlDryaPjUkzmwmHNw/Jyroo0Ke4KZZ498xQdVzWbHHncKe9QNqyCQ5gbgxLA1yLazjub0VypJP90vp8=
   - secure: ZFWH9fm7g60ueZgPMv7VrQKXrBhqkaWmMFtaBzCmxtPwgL+EbBF7HKkn08FO9X9YrqlVBepG4OYKpyQpsRE7Cpl4zBVSvxmUOvwx/6HMuOh7pfAerf6EnP/WAIEQC6OVec45+ht0BFxckf2dHGFSS/p6cbTDlfRqCoqKn1DsG5v66puMcGprL60A3oi8hsEXGhhUYLIxMkF58iq3eVU5r9dxy7RKBRJbD1uB0efq8pLfnrbSpaXtnCs22oR0T318nC9ijvCbVAeQeoQzgmPX6Q3zvGzV9KcU9fTW9cteQxm8eTZVbz/y1HXvB9oemqL4+e3WBrvv1OvHT+xhqShe1vRV07BDBL2bDb9blm3DPyg3+F91ofb8MFuorWZM+XYNrfoH19zIPwKNMBBIeZGSZYxFHJ/JJxGBdj26B7RdstqH8MLCoY+obgtkMNyc7cfwM11vkDSd7VbAv1rKIQ9Jju5x1uOYVyrIDShQAF/1wgghFlNHnFT+K0Bog3FN2u7Qcf4iJQju7Q5b/PUYilU2UUunuDY+lHniLqMG5b3WtUVCnqHg87Wl3YRWRr0xeAozisvs/lGtb5G5G3yf/UucSWfnh23176XMUQayab5NQM8/ty2TBhoPSmLNx0Jak2ygl6M8QPuxVUenMg7Q1+w+WD5rxWi0MKHPUXgzbTM7Kdw=
-deploy:
-  provider: rubygems
-  gem: glare
-  on:
-    tags: true
-    repo: peertransfer/glare
-  api_key:
-    secure: g4b4cT3RCvkdr0u4582fYVy11pslv93JdE3k6t3kXqctL9hM5A7j8nolRwFNAo+GyddKJYXr1b3F12lKzmlXy4Sbljz4bIkuEU6Ko+hBuVMgWIlQLShifk0oHkQAIy1SnrHBGOJ94FdUri6vMEw9Nb3oFHDVZlHtEbr0ZYXA9OO1X5dXkNG+QC2wsQoNDbSEs+Wi/Q0OvUXjoaae7w+70Td0HDC3nPGMceDfYkcryN/71L8ZDC/Yvi7KCuO9DeoJV4nxY4BVBPSTyPsRXtEDe7Ta/pQnHzcEN43vTR5xgNk3+t45SWHdAoku+m0eruGIdxHWbAF/1gm/sQoYcomB5XQiEmBXCjlCkAAp4lbimo3PAW3Pl7XPUIM4RuNtgZ16AwCwsTuvrvHkf/KC9/nJmKCr+wt0XiWA285Wvpq9PeVsyf6LNTWZNxELZnzSPyOqbRH/y/boA92P3FUeerP6UeoqWyuDD4MLT9qyfCCWGcDOgMhMQAWIESmbSJkhHhCJrkYhQLRUWJK1XOuGO2BU2BYaWDw4WwfVthtuiKFF2evYLP7/9Xb6JLA+Kr/xivqL1lGRBtMctIArmox9aPoxqUvGo2KLbmFAj69Jb6JhzKHQdJebTFPV0PlglkCA1Mu6gN9XTBfXF/1x4yJWj3RM1VNkDX4RSUjnssKczVcgiVw=
+jobs:
+  include:
+    - stage: integration
+      name: "Integration tests"
+      script: rake spec
+      if: type == push AND fork == false
+    - stage: deploy
+      name: "Deploy to rubygems"
+      script: skip
+      deploy:
+        provider: rubygems
+        gem: glare
+        on: deploy-gem-release
+        api_key:
+          secure: g4b4cT3RCvkdr0u4582fYVy11pslv93JdE3k6t3kXqctL9hM5A7j8nolRwFNAo+GyddKJYXr1b3F12lKzmlXy4Sbljz4bIkuEU6Ko+hBuVMgWIlQLShifk0oHkQAIy1SnrHBGOJ94FdUri6vMEw9Nb3oFHDVZlHtEbr0ZYXA9OO1X5dXkNG+QC2wsQoNDbSEs+Wi/Q0OvUXjoaae7w+70Td0HDC3nPGMceDfYkcryN/71L8ZDC/Yvi7KCuO9DeoJV4nxY4BVBPSTyPsRXtEDe7Ta/pQnHzcEN43vTR5xgNk3+t45SWHdAoku+m0eruGIdxHWbAF/1gm/sQoYcomB5XQiEmBXCjlCkAAp4lbimo3PAW3Pl7XPUIM4RuNtgZ16AwCwsTuvrvHkf/KC9/nJmKCr+wt0XiWA285Wvpq9PeVsyf6LNTWZNxELZnzSPyOqbRH/y/boA92P3FUeerP6UeoqWyuDD4MLT9qyfCCWGcDOgMhMQAWIESmbSJkhHhCJrkYhQLRUWJK1XOuGO2BU2BYaWDw4WwfVthtuiKFF2evYLP7/9Xb6JLA+Kr/xivqL1lGRBtMctIArmox9aPoxqUvGo2KLbmFAj69Jb6JhzKHQdJebTFPV0PlglkCA1Mu6gN9XTBfXF/1x4yJWj3RM1VNkDX4RSUjnssKczVcgiVw=
+      rvm: 2.6
+      if: tag IS present
