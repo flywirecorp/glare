@@ -76,9 +76,10 @@ module Glare
         operations = []
 
         @current_records.delete_if do |record|
-          if new_record = @new_contents.shift
+          if (new_record = @new_contents.shift)
             final_record = record.dup
             final_record.content = new_record.content
+            final_record.proxied = new_record.proxied
             operations << Operation.new(final_record, :update)
             true
           else

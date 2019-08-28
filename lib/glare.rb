@@ -25,6 +25,11 @@ module Glare
       Domain.new(client).deregister(fqdn, type)
     end
 
+    def proxied?(fqdn, type)
+      client = build_client
+      Domain.new(client).proxied?(fqdn, type)
+    end
+
     private
 
     CF_EMAIL = 'CF_EMAIL'.freeze
@@ -35,8 +40,8 @@ module Glare
     end
 
     def default_credentials
-      email = ENV[CF_EMAIL]
-      auth_key = ENV[CF_AUTH_KEY]
+      email = ENV.fetch(CF_EMAIL)
+      auth_key = ENV.fetch(CF_AUTH_KEY)
       Credentials.new(email, auth_key)
     end
 

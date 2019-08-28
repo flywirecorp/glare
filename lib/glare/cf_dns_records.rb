@@ -41,6 +41,10 @@ module Glare
       @records.map(&:content)
     end
 
+    def all_proxied?
+      @records.all? { |r| r.proxied == true }
+    end
+
     def each
       @records.each { |record| yield(record) }
     end

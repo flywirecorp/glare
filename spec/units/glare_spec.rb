@@ -2,8 +2,8 @@ require 'glare'
 
 RSpec.describe Glare do
   before do
-    allow(ENV).to receive(:[]).with('CF_EMAIL').and_return('an_email')
-    allow(ENV).to receive(:[]).with('CF_AUTH_KEY').and_return('an_auth_key')
+    allow(ENV).to receive(:fetch).with('CF_EMAIL').and_return('an_email')
+    allow(ENV).to receive(:fetch).with('CF_AUTH_KEY').and_return('an_auth_key')
 
     allow(Glare::Client).to receive(:new).and_return(client)
   end
@@ -102,19 +102,19 @@ RSpec.describe Glare do
         name: 'not-exist.example.com', type: 'CNAME'
       ).and_return(empty_result)
 
-      Glare.register('not-exist.example.com', ['a_destination', 'another_destination'].shuffle, 'CNAME')
+      Glare.register('not-exist.example.com', ['a_destination', 'another_destination'].shuffle, 'CNAME', true)
 
       expect(client).not_to have_received(:put).
         with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
 
       expect(client).to have_received(:post).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination', proxied: false
+        type: 'CNAME', name: 'not-exist.example.com', content: 'a_destination', proxied: true
       )
 
       expect(client).to have_received(:post).with(
         '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records',
-        type: 'CNAME', name: 'not-exist.example.com', content: 'another_destination', proxied: false
+        type: 'CNAME', name: 'not-exist.example.com', content: 'another_destination', proxied: true
       )
     end
 
@@ -165,25 +165,25 @@ RSpec.describe Glare do
           end
         end
 
-        context 'all records contents are different' do
+        context 'all records proxied attributes are different' do
           it 'sends registration data to update endpoint' do
-            Glare.register('wadus.example.com', ['a_destination.com', 'yet_another_destination.com'].shuffle, 'CNAME')
+            destinations = ['destination.com', 'another_destination.com'].shuffle
+            Glare.register('wadus.example.com', destinations, 'CNAME', true)
 
             expect(client).not_to have_received(:post).
               with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)
 
             expect(client).to have_received(:put).with(
               any_args,
-              type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false
+              type: 'CNAME', name: 'wadus.example.com', content: 'destination.com', proxied: true
             )
 
             expect(client).to have_received(:put).with(
               any_args,
-              type: 'CNAME', name: 'wadus.example.com', content: 'yet_another_destination.com', proxied: false
+              type: 'CNAME', name: 'wadus.example.com', content: 'another_destination.com', proxied: true
             )
           end
         end
-
       end
 
       it 'updates different records and deletes extra ones' do
@@ -194,14 +194,15 @@ RSpec.describe Glare do
 
         expect(client).to have_received(:put).with(
           any_args,
-          { type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false }
+          type: 'CNAME', name: 'wadus.example.com', content: 'a_destination.com', proxied: false
         )
 
         expect(client).to have_received(:delete).once
       end
 
       it 'updates different records and creates new ones' do
-        Glare.register('wadus.example.com', ['destination.com', 'another_destination.com', 'a_third_destination.com'].shuffle, 'CNAME')
+        destinations = ['destination.com', 'another_destination.com', 'a_third_destination.com'].shuffle
+        Glare.register('wadus.example.com', destinations, 'CNAME')
 
         expect(client).not_to have_received(:put).with(
           '/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records/a1f984afe5544840505494298f54c33e',
