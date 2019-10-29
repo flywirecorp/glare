@@ -34,10 +34,7 @@ module Glare
 
     CF_EMAIL = 'CF_EMAIL'.freeze
     CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
-
-    def client(credentials)
-      Glare::Client.new(credentials.email, credentials.auth_key)
-    end
+    CF_API_TOKEN = 'CF_API_TOKEN'.freeze
 
     def default_credentials
       email = ENV.fetch(CF_EMAIL)
@@ -45,9 +42,20 @@ module Glare
       Credentials.new(email, auth_key)
     end
 
-    def build_client
+    def client_with_api_key
       credentials = default_credentials
-      client(credentials)
+      Glare::Client.new.from_global_api_key(credentials.email, credentials.auth_key)
+    end
+
+    def client_with_api_token
+      return nil unless ENV.key?(CF_API_TOKEN)
+
+      api_token = ENV.fetch(CF_API_TOKEN)
+      Glare::Client.new.from_scoped_api_token(api_token)
+    end
+
+    def build_client
+      client_with_api_token || client_with_api_key
     end
   end
 end

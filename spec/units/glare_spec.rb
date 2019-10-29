@@ -48,7 +48,7 @@ RSpec.describe Glare do
     it 'uses default credentials' do
       Glare.register('example.com', 'a_destination', 'CNAME')
 
-      expect(Glare::Client).to have_received(:new).with('an_email', 'an_auth_key')
+      expect(client).to have_received(:from_global_api_key).with('an_email', 'an_auth_key')
     end
 
     it 'uses the registration endpoint' do
