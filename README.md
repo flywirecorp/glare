@@ -27,7 +27,11 @@ Or install it yourself as:
 
 ## Usage
 
-In order to configure credentials used to interact with Cloudflare API you will need to setup the following environment variables:
+In order to configure credentials used to interact with Cloudflare API you will need to setup the following environment variable:
+
+- `CF_API_TOKEN`: Scoped API [token](https://support.cloudflare.com/hc/en-us/articles/200167836-Managing-API-Tokens-and-Keys) defined in a Cloudflare account
+
+or both of the following variables:
 
 - `CF_EMAIL`: Email used to create a Cloudflare account
 - `CF_AUTH_KEY`: Auth key of the given user
