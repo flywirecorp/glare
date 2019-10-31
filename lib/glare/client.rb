@@ -5,13 +5,24 @@ module Glare
   class Client
     BASE_URL = 'https://api.cloudflare.com/client/v4'.freeze
 
-    def initialize(email, auth_key)
+    def initialize
+      @http = JSONClient.new
+      @http.debug_dev = STDERR if ENV['CF_DEBUG']
+    end
+
+    def from_global_api_key(email, auth_key)
       @headers = {
         'X-Auth-Email' => email,
         'X-Auth-Key' => auth_key
       }
-      @http = JSONClient.new
-      @http.debug_dev = STDERR if ENV['CF_DEBUG']
+      self
+    end
+
+    def from_scoped_api_token(api_token)
+      @headers = {
+        'Authorization' => "Bearer #{api_token}"
+      }
+      self
     end
 
     def get(query, params)
