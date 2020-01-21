@@ -11,17 +11,18 @@ RSpec.describe 'retrieves proxied values', integration: true do
     context 'two new records' do
       let(:destination) { ['1.2.3.4', '5.6.7.8'] }
 
-      it 'resolves to right destination' do
-        expect(proxied?(domain)).to eq(true)
+      it 'sets custom ttl' do
+         records_with_correct_ttl = records(domain).all? { |r| r.ttl == 300 }
+         expect(records_with_correct_ttl).to eq(true)
       end
     end
   end
 
   def register_domain(domain, destination)
-    Glare.register(domain, destination, type, proxied: true)
+    Glare.register(domain, destination, type, ttl: 300)
   end
 
-  def proxied?(domain)
-    Glare.proxied?(domain, type)
+  def records(domain)
+    Glare.records(domain, type)
   end
 end

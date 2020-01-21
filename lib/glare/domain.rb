@@ -7,9 +7,9 @@ module Glare
       @client = client
     end
 
-    def register(fqdn, destinations, type, proxied=false)
+    def register(fqdn, destinations, type, proxied:, ttl:)
       dns_records = Array(destinations).map do |destination|
-        DnsRecord.new(type: type, name: fqdn, content: destination, proxied: proxied)
+        DnsRecord.new(type: type, name: fqdn, content: destination, proxied: proxied, ttl: ttl)
       end
 
       zone = Zone.new(@client, fqdn)
@@ -32,6 +32,11 @@ module Glare
       zone = Zone.new(@client, fqdn)
       records = zone.records(type)
       records.all_proxied?
+    end
+
+    def records(fqdn, type)
+      zone = Zone.new(@client, fqdn)
+      zone.records(type)
     end
   end
 end

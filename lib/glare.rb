@@ -10,9 +10,9 @@ require 'glare/errors'
 
 module Glare
   class << self
-    def register(fqdn, destination, type, proxied = false)
+    def register(fqdn, destination, type, proxied: false, ttl: 1)
       client = build_client
-      Domain.new(client).register(fqdn, destination, type, proxied)
+      Domain.new(client).register(fqdn, destination, type, proxied: proxied, ttl: ttl)
     end
 
     def resolve(fqdn, type)
@@ -28,6 +28,11 @@ module Glare
     def proxied?(fqdn, type)
       client = build_client
       Domain.new(client).proxied?(fqdn, type)
+    end
+
+    def records(fqdn, type)
+      client = build_client
+      Domain.new(client).records(fqdn, type)
     end
 
     private

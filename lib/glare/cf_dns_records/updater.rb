@@ -80,6 +80,7 @@ module Glare
             final_record = record.dup
             final_record.content = new_record.content
             final_record.proxied = new_record.proxied
+            final_record.ttl = new_record.ttl
             operations << Operation.new(final_record, :update)
             true
           else

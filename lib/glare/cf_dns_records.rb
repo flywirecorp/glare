@@ -13,7 +13,8 @@ module Glare
             name: item['name'],
             type: item['type'],
             content: item['content'],
-            proxied: item['proxied']
+            proxied: item['proxied'],
+            ttl: item['ttl']
           )
         end
 
@@ -43,6 +44,10 @@ module Glare
 
     def all_proxied?
       @records.all? { |r| r.proxied == true }
+    end
+
+    def all?
+      @records.all? { |record| yield(record) }
     end
 
     def each

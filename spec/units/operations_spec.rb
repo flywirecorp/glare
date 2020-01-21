@@ -103,11 +103,11 @@ RSpec.describe Glare::CfDnsRecords::Updater do
     expect(operations.count).to be_zero
   end
 
-  def existing_record(id: 1_234, name: 'name', type: 'A', content:)
-    Glare::CfDnsRecord.new(id: id, name: name, type: type, content: content)
+  def existing_record(id: 1_234, name: 'name', type: 'A', content:, ttl: 1)
+    Glare::CfDnsRecord.new(id: id, name: name, type: type, content: content, ttl: ttl)
   end
 
-  def dns_record(name: 'name', type: 'A', content:, proxied: false)
-    Glare::DnsRecord.new(name: name, type: type, content: content, proxied: proxied)
+  def dns_record(name: 'name', type: 'A', content:, proxied: false, ttl: 1)
+    Glare::DnsRecord.new(name: name, type: type, content: content, proxied: proxied, ttl: ttl)
   end
 end
