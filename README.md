@@ -46,6 +46,8 @@ Additionally, you can set other environment variables:
 require 'glare'
 
 Glare.register('example.domain.com', 'destination.com' ,'CNAME')
+Glare.register('example.domain.com', 'destination.com' ,'CNAME', proxied: true)
+Glare.register('example.domain.com', 'destination.com' ,'CNAME', ttl: 300)
 ```
 
 Where:
