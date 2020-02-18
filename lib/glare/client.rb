@@ -1,13 +1,21 @@
-require 'jsonclient'
+require 'faraday'
+require 'faraday_middleware'
+require 'logger'
 require 'glare/api_response'
 
 module Glare
   class Client
-    BASE_URL = 'https://api.cloudflare.com/client/v4'.freeze
+    BASE_HOST = 'https://api.cloudflare.com'
+    BASE_PATH = '/client/v4'.freeze
 
     def initialize
-      @http = JSONClient.new
-      @http.debug_dev = STDERR if ENV['CF_DEBUG']
+      @http = Faraday::Connection.new(BASE_HOST) do |builder|
+        builder.request  :json
+        builder.response :logger, Logger.new(STDERR) if ENV['CF_DEBUG']
+        builder.response :json, :content_type => /\bjson$/
+
+        builder.adapter  :net_http
+      end
     end
 
     def from_global_api_key(email, auth_key)
@@ -26,19 +34,19 @@ module Glare
     end
 
     def get(query, params)
-      ApiResponse.new(@http.get(BASE_URL + query, params, @headers)).valid!
+      ApiResponse.new(@http.get(BASE_HOST + BASE_PATH + query, params, @headers)).valid!
     end
 
     def post(query, data)
-      ApiResponse.new(@http.post(BASE_URL + query, data, @headers)).valid!
+      ApiResponse.new(@http.post(BASE_HOST + BASE_PATH + query, data, @headers)).valid!
     end
 
     def put(query, data)
-      ApiResponse.new(@http.put(BASE_URL + query, data, @headers)).valid!
+      ApiResponse.new(@http.put(BASE_HOST + BASE_PATH + query, data, @headers)).valid!
     end
 
     def delete(query, params=nil)
-      ApiResponse.new(@http.delete(BASE_URL + query, params, @headers)).valid!
+      ApiResponse.new(@http.delete(BASE_HOST + BASE_PATH + query, params, @headers)).valid!
     end
   end
 end

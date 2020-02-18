@@ -1,5 +1,4 @@
 require 'glare/api_response'
-require 'httpclient/http'
 
 RSpec.describe Glare::ApiResponse do
   let(:error_response) { load_fixture('error_response') }
