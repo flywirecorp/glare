@@ -22,7 +22,7 @@ module Glare
     end
 
     def content
-      @response.content
+      @response.body
     end
 
     def errors

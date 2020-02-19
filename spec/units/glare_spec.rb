@@ -8,13 +8,17 @@ RSpec.describe Glare do
   around do |example|
     previous_cf_email = ENV['CF_EMAIL']
     previous_cf_auth_key = ENV['CF_AUTH_KEY']
+    previous_cf_api_token = ENV['CF_API_TOKEN']
+
     ENV['CF_EMAIL'] = 'an_email'
     ENV['CF_AUTH_KEY'] = 'an_auth_key'
+    ENV.delete('CF_API_TOKEN')
 
     example.run
 
     ENV['CF_EMAIL'] = previous_cf_email
     ENV['CF_AUTH_KEY'] = previous_cf_auth_key
+    ENV['CF_API_TOKEN'] = previous_cf_api_token
   end
 
   let(:client) { spy(Glare::Client) }
