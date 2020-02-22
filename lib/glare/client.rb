@@ -4,6 +4,7 @@ require 'faraday'
 require 'faraday_middleware'
 require 'logger'
 require 'glare/api_response'
+require 'httpx/adapters/faraday'
 
 module Glare
   class Client
@@ -16,7 +17,7 @@ module Glare
         builder.response :logger, Logger.new(STDERR) if ENV['CF_DEBUG']
         builder.response :json, content_type: /\bjson$/
 
-        builder.adapter  :net_http
+        builder.adapter :httpx
       end
     end
 
