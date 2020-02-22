@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/api_response'
 
 RSpec.describe Glare::ApiResponse do

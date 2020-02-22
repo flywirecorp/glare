@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Glare
   class Domain
     class Record

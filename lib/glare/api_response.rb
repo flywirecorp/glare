@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/errors'
 
 module Glare
@@ -12,6 +14,7 @@ module Glare
 
     def valid!
       raise Glare::Errors::ApiError.new(errors) unless success?
+
       self
     end
 

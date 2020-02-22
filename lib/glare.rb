@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'public_suffix'
 require 'glare/version'
 require 'glare/credentials'
@@ -37,9 +39,9 @@ module Glare
 
     private
 
-    CF_EMAIL = 'CF_EMAIL'.freeze
-    CF_AUTH_KEY = 'CF_AUTH_KEY'.freeze
-    CF_API_TOKEN = 'CF_API_TOKEN'.freeze
+    CF_EMAIL = 'CF_EMAIL'
+    CF_AUTH_KEY = 'CF_AUTH_KEY'
+    CF_API_TOKEN = 'CF_API_TOKEN'
 
     def default_credentials
       email = ENV.fetch(CF_EMAIL)

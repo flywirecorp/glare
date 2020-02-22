@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare'
 
 RSpec.describe 'retrieves proxied values', integration: true do
@@ -12,8 +14,8 @@ RSpec.describe 'retrieves proxied values', integration: true do
       let(:destination) { ['1.2.3.4', '5.6.7.8'] }
 
       it 'sets custom ttl' do
-         records_with_correct_ttl = records(domain).all? { |r| r.ttl == 300 }
-         expect(records_with_correct_ttl).to eq(true)
+        records_with_correct_ttl = records(domain).all? { |r| r.ttl == 300 }
+        expect(records_with_correct_ttl).to eq(true)
       end
     end
   end
