@@ -13,28 +13,53 @@ require 'glare/errors'
 module Glare
   class << self
     def register(fqdn, destination, type, proxied: false, ttl: 1)
-      client = build_client
-      Domain.new(client).register(fqdn, destination, type, proxied: proxied, ttl: ttl)
+      client.register(fqdn, destination, type, proxied: proxied, ttl: ttl)
     end
 
     def resolve(fqdn, type)
-      client = build_client
-      Domain.new(client).resolve(fqdn, type)
+      client.resolve(fqdn, type)
     end
 
     def deregister(fqdn, type)
-      client = build_client
-      Domain.new(client).deregister(fqdn, type)
+      client.deregister(fqdn, type)
     end
 
     def proxied?(fqdn, type)
-      client = build_client
-      Domain.new(client).proxied?(fqdn, type)
+      client.roxied?(fqdn, type)
     end
 
     def records(fqdn, type)
-      client = build_client
-      Domain.new(client).records(fqdn, type)
+      client.records(fqdn, type)
+    end
+
+    def client
+      Instance.new
+    end
+  end
+
+  class Instance
+    def initialize
+      @client = Domain.new(build_client)
+    end
+
+    def register(fqdn, destination, type, proxied: false, ttl: 1)
+      @client.register(fqdn, destination, type, proxied: proxied, ttl: ttl)
+    end
+
+    def resolve(fqdn, type)
+      @client.resolve(fqdn, type)
+    end
+
+    def deregister(fqdn, type)
+      @client.deregister(fqdn, type)
+    end
+
+    def proxied?(fqdn, type)
+      @client.proxied?(fqdn, type)
+    end
+
+    def records(fqdn, type)
+      @client.records(fqdn, type)
     end
 
     private
