@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare'
 
 RSpec.describe 'retrieves proxied values', integration: true do

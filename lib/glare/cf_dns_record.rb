@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Glare
   class CfDnsRecord
     def initialize(id:, name:, type:, content:, proxied: false, ttl:)
@@ -9,12 +11,12 @@ module Glare
       @ttl = ttl
     end
 
-    def ==(cf_dns_record)
-      @type == cf_dns_record.type &&
-        @name == cf_dns_record.name &&
-        @content == cf_dns_record.content &&
-        @proxied == cf_dns_record.proxied &&
-        @ttl == cf_dns_record.ttl
+    def ==(other)
+      @type == other.type &&
+        @name == other.name &&
+        @content == other.content &&
+        @proxied == other.proxied &&
+        @ttl == other.ttl
     end
 
     def to_h

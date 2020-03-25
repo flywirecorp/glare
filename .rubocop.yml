@@ -1,0 +1,155 @@
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+
+Layout/HashAlignment:
+  Enabled: true
+
+Layout/ParameterAlignment:
+  # Alignment of parameters in multi-line method calls.
+  #
+  # The `with_first_parameter` style aligns the following lines along the same
+  # column as the first parameter.
+  #
+  #     method_call(a,
+  #                 b)
+  #
+  # The `with_fixed_indentation` style aligns the following lines with one
+  # level of indentation relative to the start of the line with the method call.
+  #
+  #     method_call(a,
+  #       b)
+  EnforcedStyle: with_fixed_indentation
+
+Style/ClassVars:
+  Enabled: true
+
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    reduce: inject
+    detect: find
+
+Style/Documentation:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: true
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+
+Style/Encoding:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: true
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Style/Next:
+  Enabled: true
+
+Naming/PredicateName:
+  Enabled: true
+
+Style/RedundantBegin:
+  Enabled: true
+
+Style/RedundantSelf:
+  Enabled: true
+
+Style/SignalException:
+  Enabled: true
+  EnforcedStyle: only_raise
+
+Style/RaiseArgs:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/SpaceAroundOperators:
+  Enabled: true
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: true
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  Enabled: true
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: true
+  EnforcedStyle: conditionals
+
+Style/Lambda:
+  Enabled: true
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - '**/db/schema.rb'
+    - 'vendor/**/*'
+
+require: rubocop-performance

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/domain/cf_zones'
 require 'glare/errors'
 
@@ -23,6 +25,7 @@ module Glare
 
       def first_id
         raise ::Glare::Errors::NotExistingZoneError.new if @zones.empty?
+
         @zones.first.id
       end
     end

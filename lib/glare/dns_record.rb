@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Glare
   class DnsRecord
-    def initialize(name:, type:, content:, proxied:, ttl: )
+    def initialize(name:, type:, content:, proxied:, ttl:)
       @name = name
       @type = type
       @content = content
@@ -18,12 +20,12 @@ module Glare
       }
     end
 
-    def ==(dns_record)
-      @type == dns_record.type &&
-        @name == dns_record.name &&
-        @content == dns_record.content &&
-        @proxied == dns_record.proxied &&
-        @ttl == dns_record.ttl
+    def ==(other)
+      @type == other.type &&
+        @name == other.name &&
+        @content == other.content &&
+        @proxied == other.proxied &&
+        @ttl == other.ttl
     end
 
     attr_reader :content, :type, :name, :proxied, :ttl

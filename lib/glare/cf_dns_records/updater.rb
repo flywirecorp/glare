@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Glare
   class CfDnsRecords
     class Updater
@@ -33,9 +35,9 @@ module Glare
           @action = action
         end
 
-        def ==(operation)
-          @record == operation.record &&
-            @action == operation.action
+        def ==(other)
+          @record == other.record &&
+            @action == other.action
         end
 
         attr_reader :action, :record
