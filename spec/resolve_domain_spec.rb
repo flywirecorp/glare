@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare'
 
 RSpec.describe 'Resolve domain', integration: true do

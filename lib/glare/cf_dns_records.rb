@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/cf_dns_record'
 require 'glare/cf_dns_records/updater'
 

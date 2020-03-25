@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/domain/zone'
 require 'glare/domain/record'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare/domain/cf_zones'
 
 module Glare
@@ -15,6 +17,7 @@ module Glare
 
       def id
         return @id if @id
+
         zone_search = @client.get('/zones', name: registered_domain)
         @id = CfZones.from_result(zone_search).first_id
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare'
 
 RSpec.describe Glare do
@@ -116,7 +118,8 @@ RSpec.describe Glare do
         name: 'not-exist.example.com', type: 'CNAME'
       ).and_return(empty_result)
 
-      Glare.register('not-exist.example.com', ['a_destination', 'another_destination'].shuffle, 'CNAME', proxied: true, ttl: 1)
+      destinations = %w[a_destination another_destination].shuffle
+      Glare.register('not-exist.example.com', destinations, 'CNAME', proxied: true, ttl: 1)
 
       expect(client).not_to have_received(:put).
         with('/zones/9de4eb694c380d79845d35cd939cc7a7/dns_records', any_args)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday'
 require 'faraday_middleware'
 require 'logger'
@@ -6,15 +8,15 @@ require 'glare/api_response'
 module Glare
   class Client
     BASE_HOST = 'https://api.cloudflare.com'
-    BASE_PATH = '/client/v4'.freeze
+    BASE_PATH = '/client/v4'
 
     def initialize
       @http = Faraday::Connection.new(BASE_HOST) do |builder|
         builder.request  :json
         builder.response :logger, Logger.new(STDERR) if ENV['CF_DEBUG']
-        builder.response :json, :content_type => /\bjson$/
+        builder.response :json, content_type: /\bjson$/
 
-        builder.adapter  :net_http
+        builder.adapter :net_http
       end
     end
 

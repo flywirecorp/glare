@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'glare'
 
 RSpec.describe 'delete domain', integration: true do
