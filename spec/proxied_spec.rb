@@ -6,8 +6,13 @@ RSpec.describe 'retrieves proxied values', integration: true do
   context 'when a domain contains more than one destination' do
     let(:domain) { 'a.flywire.com.cn' }
     let(:type) { 'A' }
+
     before do
       register_domain(domain, destination)
+    end
+
+    after do
+      deregister_domain(domain, destination)
     end
 
     context 'two new records' do
@@ -21,6 +26,10 @@ RSpec.describe 'retrieves proxied values', integration: true do
 
   def register_domain(domain, destination)
     Glare.register(domain, destination, type, proxied: true)
+  end
+
+  def deregister_domain(domain, type)
+    Glare.deregister(domain, type)
   end
 
   def proxied?(domain)
