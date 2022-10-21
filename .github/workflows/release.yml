@@ -1,0 +1,29 @@
+name: Release to rubygems
+
+on:
+  push:
+    branches:
+      - $default-branch
+
+jobs:
+  build:
+    steps:
+      - name: Release gem
+        if: contains(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+        run: |
+          set +x
+          mkdir -p ~/.gem
+
+          cat << EOF > ~/.gem/credentials
+          ---
+          :github: Bearer ${GITHUB_TOKEN}
+          :rubygems_api_key: ${RUBYGEMS_API_KEY}
+          EOF
+
+          chmod 0600 ~/.gem/credentials
+          set -x
+
+          bundle exec rake release
