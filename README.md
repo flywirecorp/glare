@@ -4,7 +4,7 @@ Ruby gem to interact with CloudFlare API v4
 
 ## Build Status
 
-[![Build Status](https://travis-ci.org/peertransfer/glare.svg?branch=master)](https://travis-ci.org/peertransfer/glare)
+[![Build Status](https://github.com/peertransfer/glare/actions/workflows/ruby.yml/badge.svg)](https://github.com/peertransfer/glare/actions)
 [![Code Climate](https://codeclimate.com/github/peertransfer/glare/badges/gpa.svg)](https://codeclimate.com/github/peertransfer/glare)
 [![Known Vulnerabilities](https://snyk.io/test/github/peertransfer/glare/badge.svg)](https://snyk.io/test/github/peertransfer/glare)
 
