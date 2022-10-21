@@ -10,14 +10,13 @@ jobs:
       matrix:
         ruby_version: [ '2.5', '2.6', '2.7', '3.0', '3.1' ]
 
-    name: Ruby ${{ matrix.ruby }} sample
+    name: Ruby ${{ matrix.ruby_version }}
 
     steps:
       - uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby_version }}
-      - name: Install dependencies
-        run: bundle install
-      - name: unit tests
+          bundler-cache: true
+      - name: Run unit tests
         run: bundle exec rake spec:unit
