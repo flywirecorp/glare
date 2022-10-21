@@ -12,7 +12,7 @@ RSpec.describe 'delete domain', integration: true do
     end
 
     it 'deletes all records with given type' do
-      expect(resolve(domain)).to eq(destination)
+      expect(resolve(domain)).to match_array(destination)
       delete(domain)
       expect(resolve(domain)).to eq([])
     end

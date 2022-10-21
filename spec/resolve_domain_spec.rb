@@ -40,7 +40,7 @@ RSpec.describe 'Resolve domain', integration: true do
       let(:destination) { ['1.2.3.4', '5.6.7.8'] }
 
       it 'resolves to right destination' do
-        expect(resolve(domain)).to eq(destination)
+        expect(resolve(domain)).to match_array(destination)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe 'Resolve domain', integration: true do
       let(:destination) { ['1.2.3.5', '6.7.8.9'] }
 
       it 'resolves to right destination' do
-        expect(resolve(domain)).to eq(destination)
+        expect(resolve(domain)).to match_array(destination)
       end
     end
   end
