@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'faraday'
-require 'faraday_middleware'
+if Faraday::VERSION.to_i < 2
+  require 'faraday_middleware'
+end
 require 'logger'
 require 'glare/api_response'
 
