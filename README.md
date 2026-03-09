@@ -4,7 +4,7 @@ Ruby gem to interact with CloudFlare API v4
 
 ## Build Status
 
-[![Build Status](https://github.com/peertransfer/glare/actions/workflows/ruby.yml/badge.svg)](https://github.com/peertransfer/glare/actions)
+[![Build Status](https://github.com/flywirecorp/glare/actions/workflows/ruby.yml/badge.svg)](https://github.com/flywirecorp/glare/actions)
 [![Known Vulnerabilities](https://snyk.io/test/github/peertransfer/glare/badge.svg)](https://snyk.io/test/github/peertransfer/glare)
 
 ## Installation
@@ -27,7 +27,7 @@ Or install it yourself as:
 
 In order to configure credentials used to interact with Cloudflare API you will need to setup the following environment variable:
 
-- `CF_API_TOKEN`: Scoped API [token](https://support.cloudflare.com/hc/en-us/articles/200167836-Managing-API-Tokens-and-Keys) defined in a Cloudflare account
+- `CF_API_TOKEN`: Scoped API [token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) defined in a Cloudflare account
 
 or both of the following variables:
 
@@ -85,7 +85,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/peertransfer/glare/fork )
+1. Fork it ( https://github.com/flywirecorp/glare/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
